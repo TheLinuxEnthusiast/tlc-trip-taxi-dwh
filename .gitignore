@@ -1,0 +1,4 @@
+data/
+workspace.tar.gz
+id_rsa*
+.ipynb*
