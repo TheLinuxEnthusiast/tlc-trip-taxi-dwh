@@ -27,10 +27,10 @@
 
 <br>
 
-1. ![Project Scope](docs/ProjectScope.md) 
+1. [Project Scope](docs/ProjectScope.md) 
 
-2. ![Data Dictionary](docs/DataDictionary.md)
+2. [Data Dictionary](docs/DataDictionary.md)
 
-3. ![Data Model](docs/DataModel.md)
+3. [Data Model](docs/DataModel.md)
 
-4. ![ETL Design](docs/ETLDesign.md) 
+4. [ETL Design](docs/ETLDesign.md) 
