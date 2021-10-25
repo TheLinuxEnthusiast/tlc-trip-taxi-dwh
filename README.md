@@ -1,6 +1,5 @@
 ## Udacity Capstone Project - TLC Taxi trips Data Warehouse Project
 
----------------------------------------------------------
 
 **Name: Darren Foley**
 

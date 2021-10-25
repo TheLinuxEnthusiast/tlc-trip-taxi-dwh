@@ -1,7 +1,5 @@
 ## Project Scope
 
---------------------------------------------
-
 <br>
 
 ### Navigation
@@ -54,7 +52,8 @@
 
 <p>The new system must be able to handle the existing data volume and reporting load. Data volume and analytical workload is expected to increase over time. The system should have the flexiblity to scale with little to no downtime or administrative overhead. </p>
 
-<u>Existing Data Volume:</u> 
+Existing Data Volume:
+----------------------
 
 <p>Files can vary in size between 100MB to +1GB or more. Due to COVID-19, passenger numbers have been much lower than usual for 2020. File size is expected to increase post covid due to higher demand. Files are deposited in an S3 bucket by the third party monitoring company with URI: "s3://nyc-tlc/trip data/".</p>
 
@@ -69,7 +68,8 @@
 
 <br>
 
-<u>Additional datasets:</u>
+Additional datasets
+--------------------
 
 | FileName                          | FilePattern    | FileType(s)    | Size               | S3 Path Location   |
 |:---------------------------------:|:--------------:|:--------------:|:------------------:|:------------------:|
@@ -79,19 +79,28 @@
 
 <br>
 
-<u>Other Data Sources (Uber API):</u>
+Other Data Sources (Uber API)
+------------------------------
 
 <p>The high frequency for hire vehicle (hvFHV) data does not have any cost or pricing included. This will need to be estimated using the uber API:</p>
 
-[Uber API Estimate](https://developer.uber.com/docs/riders/references/api/v1.2/estimates-price-get)
+[Documentation on Uber API Estimate](https://developer.uber.com/docs/riders/references/api/v1.2/estimates-price-get)
 
-<p>Uber uses three parameters to calculate cost; 1. Base rate (time & distance); 2. Booking fee; 3. Busy times/areas. The client provides the latitude/longitude of source and destination and a price estimate is returned based on parameters mentioned.</p>
+<p>Uber uses three parameters to calculate cost</p>
+
+1. Base rate (time & distance)
+
+2. Booking fee
+
+3. Busy times/areas.
+
+<p>The client provides the latitude/longitude of source and destination and a price estimate is returned based on parameters mentioned.</p>
 
 <p> The call "GET /v1.2/estimates/price" can be used to roughly gauge how much the fare will cost but it may not be completely accurate. The following assumptions and limitations have been defined below:</p>
 
 1. Latitude and Longitude are estimated based on Zone. The centroid of the zone shapefile polygon is taken from both the starting location zone and ending location zone. This is then passed to the /v1.2/estimates/price call. If the start and end are in the same zone a flat base rate is assumed. 
 
-2. We have no information relating to peak time or if there were a shortage of drivers which would increase the price for a limited period. We are taking the same estimated pricing for all trips regardless of when they happened.
+2. We have no information relating to peak time or drivers availablity which would increase the price for a limited period. We are taking the same estimated pricing for all trips regardless of when they happened.
 
 3. The booking fee can vary based on distance but we are only estimating distance so this may not be accurate.
 
@@ -103,8 +112,9 @@
 
 #### 3.2 Current Reporting load
 
-<p>Currently, the number of queries run against the legacy DWH is quite low. This is expected to change once the legacy environment has been fully migrated to AWS. There is plan to use tableau for data visualisation which is expected to increase demand for analytics on the DWH. In addition, an increase in ad-hoc queries being run by analysts and data scientist is expected to increase as access to ML resources such as Sagemaker becomes available. We can assume additional CPU load many times higher than it currently is at present. This will need to be factored into the Redshift size. </p>
+<p>Currently, the number of queries run against the legacy DWH is quite low. This is expected to change once the legacy environment has been fully migrated to AWS. There is a plan to use tableau for data visualisation which is expected to increase demand for analytics on the DWH. In addition, an increase in ad-hoc queries being run by analysts and data scientist is expected to increase as access to ML resources such as Sagemaker becomes available. We can assume additional CPU load many times higher than it currently is at present. This will need to be factored into the Redshift size. </p>
 
+<br>
 
 #### 3.3 AWS Redshift Sizing
 
@@ -116,9 +126,9 @@
 
 3. The database needed to be accessed by 100+ people. (Permissions within Redshift, access control)
 
-<br>
 
-<u>Scenario 1: The data increased by 100x</u>
+Scenario 1: The data increased by 100x
+---------------------------------------
 
 <p>Redshift has various options to handle rapidly increasing load. According to the AWS documentation, their recommedation is to use RA3 node types which are designed for when "Your data volume is growing rapidly or is expected to grow rapidly." RA3 nodes have 32 GB of RAM with 4 vCPU's with the ability to scale up to 16 nodes for a total of 1024TB of storage capacity. So if we assume load will increase by 100 fold over existing estimate for monthly load of 5GB/month. Then we can expect 500GB/month which would be 500X12 = 6TB per year. Hence, a RA3 node cluster will be sufficient to meet demand. </p>
 
@@ -129,15 +139,15 @@
 
 [AWS Documentation on Redshift Sizing](https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#working-with-clusters-overview)
 
-<br>
 
-<u>Scenario 2: The pipelines would be run on a daily basis by 7 am every day.</u>
+Scenario 2: The pipelines would be run on a daily basis by 7 am every day
+--------------------------------------------------------------------------
 
-<p>The ETL process is currently fixed at monthly data loads. If the data feeds were changed to daily, this would require a change within the Apache airflow ETL jobs. Simply changing the frequency from '@monthly@' to '@daily@' should be sufficient here (Starting at 12am). Assuming that the total amount of load per month is not expected to change only the frequency at which the data is loaded, then this should not have an impact on the Redshift cluster size specified above. There may be implications with respect to source file naming conventions from the third party data provider, these are discussed in the ETLDesign section.</p>
+<p>The ETL process is currently fixed at monthly data loads. If the data feeds were changed to daily, this would require a change within the Apache airflow ETL jobs. Simply changing the frequency from '@monthly@' to '@daily@' should be sufficient (Starting at 12am). Assuming that the total amount of load per month is not expected to change only the frequency at which the data is loaded, then this should not have an impact on the Redshift cluster size specified above. There may be implications with respect to source file naming conventions from the third party data provider, these are discussed in the ETLDesign section.</p>
 
-<br>
 
-<u>Scenario 3: The database needed to be accessed by 100+ people.</u>
+Scenario 3: The database needed to be accessed by 100+ people
+--------------------------------------------------------------
 
 <p>This will require grouping individual users based on their specific use cases within the warehouse. At a high level there are a number of roles that we will need to plan for: </p>
 
