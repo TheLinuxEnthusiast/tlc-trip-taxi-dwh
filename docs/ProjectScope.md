@@ -17,6 +17,7 @@
 <br>
 
 ### 1.0 Introduction
+--------------------
 
 <p>The NYC Taxi and Limousine Commission (TLC) are migrating their on-premise data warehouse to Amazon web services (AWS) in order to improve their analytical reporting capability. Records include fields capturing pick-up and drop-off dates/times for Yellow Taxi cabs, Green taxi cabs & for-hire vehicles (FHV) which arrive as monthly files in CSV format. Data is collected from third party technology providers who meter each vehicle and store information relating to each indiviual trip. One row represents a single trip made by a TLC-licensed vehicle.</p>
 
@@ -27,6 +28,7 @@
 <br>
 
 ### 2.0 Acronyms and Terminology
+---------------------------------
 
 | Term            | Description                                                                                                                |
 |----------------:|:--------------------------------------------------------------------------------------------------------------------------:|
@@ -47,6 +49,7 @@
 <br>
 
 ### 3.0 Requirements
+---------------------
 
 #### 3.1 Current Data Volume
 
@@ -54,7 +57,7 @@
 
 <br> 
 
-##### Existing Data Volume
+#### Existing Data Volume
 
 <p>Files can vary in size between 100MB to +1GB or more. Due to COVID-19, passenger numbers have been much lower than usual for 2020. File size is expected to increase post covid due to higher demand. Files are deposited in an S3 bucket by the third party monitoring company with URI: "s3://nyc-tlc/trip data/".</p>
 
@@ -69,7 +72,7 @@
 
 <br>
 
-##### Additional datasets
+#### Additional datasets
 
 | FileName                          | FilePattern    | FileType(s)    | Size               | S3 Path Location   |
 |:---------------------------------:|:--------------:|:--------------:|:------------------:|:------------------:|
@@ -79,7 +82,7 @@
 
 <br>
 
-##### Other Data Sources (Uber API)
+#### Other Data Sources (Uber API)
 
 <p>The high frequency for hire vehicle (hvFHV) data does not have any cost or pricing included. This will need to be estimated using the uber API:</p>
 
@@ -127,7 +130,7 @@
 
 <br>
 
-##### Scenario 1: The data increased by 100x
+#### Scenario 1: The data increased by 100x
 
 <p>Redshift has various options to handle rapidly increasing load. According to the AWS documentation, their recommedation is to use RA3 node types which are designed for when "Your data volume is growing rapidly or is expected to grow rapidly." RA3 nodes have 32 GB of RAM with 4 vCPU's with the ability to scale up to 16 nodes for a total of 1024TB of storage capacity. So if we assume load will increase by 100 fold over existing estimate for monthly load of 5GB/month. Then we can expect 500GB/month which would be 500X12 = 6TB per year. Hence, a RA3 node cluster will be sufficient to meet demand.</p>
 
@@ -140,13 +143,13 @@
 
 <br>
 
-##### Scenario 2: The pipelines would be run on a daily basis by 7 am every day
+#### Scenario 2: The pipelines would be run on a daily basis by 7 am every day
 
 <p>The ETL process is currently fixed at monthly data loads. If the data feeds were changed to daily, this would require a change within the Apache airflow ETL jobs. Simply changing the frequency from '@monthly@' to '@daily@' should be sufficient (Starting at 12am). Assuming that the total amount of load per month is not expected to change only the frequency at which the data is loaded, then this should not have an impact on the Redshift cluster size specified above. There may be implications with respect to source file naming conventions from the third party data provider, these are discussed in the ETLDesign section.</p>
 
 <br>
 
-##### Scenario 3: The database needed to be accessed by 100+ people
+#### Scenario 3: The database needed to be accessed by 100+ people
 
 <p>This will require grouping individual users based on their specific use cases within the warehouse. At a high level there are a number of roles that we will need to plan for: </p>
 
