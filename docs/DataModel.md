@@ -41,6 +41,10 @@
 
 #### 5.2 Logical Model
 
+![Conceptual Model](../images/logical_model.png)
+
+*Diagram shows the logical model of proposed facts and dimensions*
+
 <br>
 
 #### 5.3 Physical Model
