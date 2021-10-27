@@ -41,6 +41,7 @@
 | Borough         | Subset of NYC region were a taxi can pick up fairs (Queens, Brooklyn, Bronx etc)                                           |
 | Zone            | A borough contains smaller subsets called zones (There are 265 zones in NYC)                                               |
 | Trip            | A trip is defined as an individual or group of individuals travelling between two taxi zones (May be within the same zone) |
+| TSP             | Technology service provider (Vendors who monitor and record trip data)                                                     |
 
 ![Diagram of Zones in NYC](../images/NYC_Zones.jpg)
 

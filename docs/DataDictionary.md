@@ -23,16 +23,16 @@
 
 | Field Name              | Field Description                                    | Data Type  |
 |:-----------------------:|:----------------------------------------------------:|:----------:|
-| VendorID                | A code indicating the TPEP provider (1,2)            | string     |
+| VendorID*               | A code indicating the TPEP provider (1,2)            | string     |
 | tpep_pickup_datetime    | Date when meter was engaged                          | datetime   |
 | tpep_dropoff_datetime   | Date when meter was disengaged                       | datetime   |
 | passenger_count         | Number of passengers in the vehicle (Driver entered) | int        |
 | trip_distance           | Elasped Trip in miles                                | float      |
-| RatecodeID              | Rate code applied to trip (1,2,3,4,5,6)              | string     |
-| store_and_fwd_flag      | Data held in memory before being sent to vendor      | string     |
+| RatecodeID*             | Rate code applied to trip (1,2,3,4,5,6)              | string     |
+| store_and_fwd_flag      | Data held in memory before being sent to vendor(Y|N) | string     |
 | PULocationID            | Pick up location Zone code                           | string     |
 | DOLocationID            | Drop off location Zone code                          | string     |
-| payment_type            | How the trip was paid for (1,2,3,4,5,6)              | string     |
+| payment_type*           | How the trip was paid for (1,2,3,4,5,6)              | string     |
 | fare_amount             | Time and distance fare calculated                    | float      |
 | extra                   | Misc Surcharges; e.g. 0.50 for rush hour             | float      |
 | mta_tax                 | Tax automatically triggered based on meter usage     | float      |
@@ -41,6 +41,43 @@
 | improvement_surcharge   | Surcharge assessed trips at the flag drop            | float      |
 | total_amount            | Total amount, does not include cash tips             | float      |
 | congestion_surcharge    | Surcharge for traffic/congestion                     | float      |
+
+VendorID:
+
+1. Creative Mobile Technologies LLC
+
+2. VeriFone Inc
+
+
+Ratecodes:
+
+1. Standard rate
+
+2. JFK
+
+3. Newark
+
+4. Nassau or Westchester
+
+5. Negotiated fare
+
+6. Group ride
+
+
+Payment Type:
+
+1. Credit Card
+
+2. Cash
+
+3. No charge
+
+4. Dispute
+
+5. Unknown
+
+6. Voided trip
+
 
 <br>
 
@@ -52,7 +89,7 @@
 | VendorID                | A code indicating the LPEP provider (1,2)            | string     |
 | lpep_pickup_datetime    | Date when meter was engaged                          | datetime   |
 | lpep_dropoff_datetime   | Date when meter was disengaged                       | datetime   |
-| store_and_fwd_flag      | Data held in memory before being sent to vendor      | string     |
+| store_and_fwd_flag      | Data held in memory before being sent to vendor(Y|N) | string     |
 | RatecodeID              | Rate code applied to trip (1,2,3,4,5,6)              | string     |
 | PULocationID            | Pick up location Zone code                           | string     |
 | DOLocationID            | Drop off location Zone code                          | string     |
@@ -69,6 +106,12 @@
 | payment_type            | How the trip was paid for (1,2,3,4,5,6)              | string     |
 | trip_type               | Street-hail (1) or dispatch (2)                      | string     |
 | congestion_surcharge    | Surcharge for traffic/congestion                     | float      |
+
+VendorID (Same as above)
+
+RatecodeID (Same as above)
+
+Payment Type:(Same as above)
 
 <br>
 
@@ -97,7 +140,7 @@
 | dropoff_datetime        | The date and time of the trip dropoff                               | datetime   |
 | PULocationID            | TLC Taxi Zone in which the trip began                               | string     |
 | DOLocationID            | TLC Taxi Zone in which the trip ended                               | string     |
-| SR_Flag                 | Indicates if the trip was a part of a shared ride chain             | string     |
+| SR_Flag                 | Indicates if the trip was a part of a shared ride chain (1 or NULL) | string     |
 | Affiliated_base_number  | TLC Licence number for FHV vendor                                   | string     |
 
 <br>
@@ -114,3 +157,18 @@
 | Shape Area              | Area of shape polygon object                               | float      |
 | Geometry                | polygon data type, represents the taxi zone as a polygon   | polygon    |
 
+<br>
+
+#### Derived data - Uber API & calculated fields
+
+Derive the lat/long centroid from start Zone and end Zone. Pass these values to the uber api call: "GET /v1.2/estimates/price"
+
+
+| Name            | Description                                        | Data Type     |
+|:---------------:|:--------------------------------------------------:|:-------------:|
+| Start Latitude  | Estimated Latidude base on centroid of taxi zone   | decimal(11,8) |
+| Start Longitude | Estimated Longitude base on centroid of taxi zone  | decimal(10,8) | 
+| End Latitude    | Estimated Latidude base on centroid of taxi zone   | decimal(11,8) |
+| End Longitude   | Estimated Longitude base on centroid of taxi zone  | decimal(10,8) |
+| Distance        | Geometric distance between start and end lat/long  | float         |
+| Estimated Cost  | Estimated cost of fair using hvFHV                 | float         |
