@@ -57,7 +57,7 @@
 
 <br> 
 
-#### Existing Data Volume
+#### 3.1.1 Existing Data Volume
 
 <p>Files can vary in size between 100MB to +1GB or more. Due to COVID-19, passenger numbers have been much lower than usual for 2020. File size is expected to increase post covid due to higher demand. Files are deposited in an S3 bucket by the third party monitoring company with URI: "s3://nyc-tlc/trip data/".</p>
 
@@ -72,7 +72,7 @@
 
 <br>
 
-#### Additional datasets
+#### 3.1.2 Additional datasets
 
 | FileName                          | FilePattern    | FileType(s)    | Size               | S3 Path Location   |
 |:---------------------------------:|:--------------:|:--------------:|:------------------:|:------------------:|
@@ -82,7 +82,7 @@
 
 <br>
 
-#### Other Data Sources (Uber API)
+#### 3.1.3 Other Data Sources (Uber API)
 
 <p>The high frequency for hire vehicle (hvFHV) data does not have any cost or pricing included. This will need to be estimated using the uber API:</p>
 
