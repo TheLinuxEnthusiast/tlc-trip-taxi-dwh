@@ -26,7 +26,16 @@
 
 ![Conceptual Model](../images/conceptual_model.png)
 
-*Diagram shows a roguh conceptual model of proposed facts and dimensions*
+*Diagram shows a rough conceptual model of proposed facts and dimensions*
+
+
+**Notes of interest:**
+
+<p>Since there is hierarchical relationship between borough and zone (one borough has many zones), a snowflake configuration could have been used. However the amount of zones is relatively small, the risk of write anonomalies is low and thus a denormalized dimension is sufficient here.</p>
+
+<p>The location/zone dimension will be referenced twice by foreign key, once for pick up location and again for drop off location.</p> 
+
+<p>Time will be split into month, day, hour , day of week, day of month</p>
 
 <br>
 
