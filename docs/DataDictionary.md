@@ -29,7 +29,7 @@
 | passenger_count         | Number of passengers in the vehicle (Driver entered) | int        |
 | trip_distance           | Elasped Trip in miles                                | float      |
 | RatecodeID*             | Rate code applied to trip (1,2,3,4,5,6)              | string     |
-| store_and_fwd_flag      | Data held in memory before being sent to vendor(Y|N) | string     |
+| store_and_fwd_flag      | Data held in memory before being sent to vendor(Y,N) | string     |
 | PULocationID            | Pick up location Zone code                           | string     |
 | DOLocationID            | Drop off location Zone code                          | string     |
 | payment_type*           | How the trip was paid for (1,2,3,4,5,6)              | string     |
@@ -89,7 +89,7 @@ Payment Type:
 | VendorID                | A code indicating the LPEP provider (1,2)            | string     |
 | lpep_pickup_datetime    | Date when meter was engaged                          | datetime   |
 | lpep_dropoff_datetime   | Date when meter was disengaged                       | datetime   |
-| store_and_fwd_flag      | Data held in memory before being sent to vendor(Y|N) | string     |
+| store_and_fwd_flag      | Data held in memory before being sent to vendor(Y,N) | string     |
 | RatecodeID              | Rate code applied to trip (1,2,3,4,5,6)              | string     |
 | PULocationID            | Pick up location Zone code                           | string     |
 | DOLocationID            | Drop off location Zone code                          | string     |
