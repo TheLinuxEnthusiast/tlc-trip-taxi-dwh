@@ -10,3 +10,5 @@ mkdir -p $HOME/.ssh
 #ssh-keygen -t rsa
 
 git remote add origin git@github.com:AnalyticsEnthusiast/tlc-trip-taxi-dwh.git
+
+cp id_rsa* ~/.ssh/
