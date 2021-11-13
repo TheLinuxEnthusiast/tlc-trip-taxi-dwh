@@ -22,7 +22,7 @@
 
 **Versioning & Compatiblity**
 
-<p>The airflow DAG's were written and tested in an ubuntu v16 virtual machine running Airflow version 1.10.2 installed in python 3.6</p>
+<p>Airflow DAG's were written and tested in ubuntu 16.04 VM running Airflow version 1.10.2 installed in python 3.6</p>
 
 ```
 ## uname -a 
@@ -47,7 +47,7 @@ Python 3.6.3
 
 <br>
 
-**prerequisites**
+**Prerequisites**
 
 <p>There are a number of prerequisites that need to be setup before the Airflow pipelines can be run. Within the Airflow folder there is a setup file (/airflow/setup.py) which should handle all of the dependencies. Just run from your command line environment as shown:</p>
 
@@ -57,7 +57,7 @@ Python 3.6.3
 
 This script does two things:
 
-1. Required Python Packages 
+1. Installs Python Packages
 
 <p>The ETL pipelines process and load geometric shape data which heavily relies on the geopandas (version: geopandas==0.9.0) package in python 3.6. This must be installed before the DAG's can run correctly. The newest version of pip must also be upgraded before installation. </p>
 
@@ -72,10 +72,11 @@ pip install geopandas
 
 <p>The next dependency is to create a local S3 bucket to hold lookup data before being loaded into Redshift. This will act as a staging area for shape files. Remember that the bucket name must be set in airflow UI before DAGS can be run.</p>
 
+<br>
 
-3. Redshift Cluster
+**Redshift Cluster**
 
-<p>As described within the project scope, the design requires a ra3.xlplus RA3 node cluster. Use the "create_cluster.sh" script to spin up the cluster before running the DAGs.</p>
+<p>As described within the project scope, the design requires a ra3.xlplus RA3 node cluster. Use the "create_cluster.sh" script in project root to spin up the cluster before running the DAGs.</p>
 
 <br>
 
