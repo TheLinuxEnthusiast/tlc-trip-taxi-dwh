@@ -4,7 +4,7 @@
 
 ### Navigation
 
-1. [Home](../README.md)
+1. [Project Setup](../README.md)
 
 2. Project Scope
 

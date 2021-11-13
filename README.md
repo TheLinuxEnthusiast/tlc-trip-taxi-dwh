@@ -5,29 +5,100 @@
 
 **Creation Date: 2021-10-21**
 
+**Last Modified Data: 2021-11-13**
+
 -------------------------------------------------------
 
 <br>
 
-### Project Overview
+### Project Index
 
-<p>The NYC Taxi and Limousine Commission (TLC) are migrating their on-premise data warehouse to Amazon web services (AWS) in order to improve their analytical reporting capability. Records include fields capturing pick-up and drop-off dates/times for Yellow Taxi cabs, Green taxi cabs & for-hire vehicles (FHV) which arrive as monthly files in CSV format. Data is collected from third party technology providers who meter each vehicle and store information relating to each indiviual trip. One row represents a single trip made by a TLC-licensed vehicle.</p>
+![Project Index](project_index.png)
 
-<br>
-
-<p>The on premise datawarehouse is stored in Postgres v9 which is currently under high load and is stuggling to meet daily reporting requirements. A "lift and shift" to Redshift in AWS should provide improved reporting capacity and flexibility. Redshift's massively parallel processing (MPP) architecture allows for more nodes to be added as load increases. Since Redshift is derived from postgres, it should make migration easier in comparison with other vendors.</p>
 
 <br>
 
-<p>The existing ETL process is written in python and SQL using custom data transformations, with jobs scheduled using cron. TLC would like to migrate their legacy data feeds to Apache Airflow which will give better visiblity over their existing etl pipeline through the airflow UI, in addition to airflows modular architecture and extensible operators.</p>
+### Project Setup
 
-<p>The following sections go into more detail about the data model, data dictionary & ETL pipeline.</p>
+**Versioning & Compatiblity**
+
+<p>The airflow DAG's were written and tested in an ubuntu v16 virtual machine running Airflow version 1.10.2 installed in python 3.6</p>
+
+```
+## uname -a 
+Linux 0ed8a3d2ab28 4.15.0-1098-gcp #111~16.04.1-Ubuntu SMP Tue Apr 13 19:05:08 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
+```
+
+
+```
+## airflow version
+  ____________       _____________
+ ____    |__( )_________  __/__  /________      __
+____  /| |_  /__  ___/_  /_ __  /_  __ \_ | /| / /
+___  ___ |  / _  /   _  __/ _  / / /_/ /_ |/ |/ /
+ _/_/  |_/_/  /_/    /_/    /_/  \____/____/|__/
+   v1.10.2
+```
+
+```
+## python --version
+Python 3.6.3
+```
+
+<br>
+
+**prerequisites**
+
+<p>There are a number of prerequisites that need to be setup before the Airflow pipelines can be run. Within the Airflow folder there is a setup file (/airflow/setup.py) which should handle all of the dependencies. Just run from your command line environment as shown:</p>
+
+```
+## ./setup.py
+```
+
+This script does two things:
+
+1. Required Python Packages 
+
+<p>The ETL pipelines process and load geometric shape data which heavily relies on the geopandas (version: geopandas==0.9.0) package in python 3.6. This must be installed before the DAG's can run correctly. The newest version of pip must also be upgraded before installation. </p>
+
+```
+pip install --upgrade pip
+
+pip install geopandas
+
+```
+
+2. S3 Staging Bucket
+
+<p>The next dependency is to create a local S3 bucket to hold lookup data before being loaded into Redshift. This will act as a staging area for shape files. Remember that the bucket name must be set in airflow UI before DAGS can be run.</p>
+
+
+3. Redshift Cluster
+
+<p>As described within the project scope, the design requires a ra3.xlplus RA3 node cluster. Use the "create_cluster.sh" script to spin up the cluster before running the DAGs.</p>
+
+<br>
+
+**Airflow Connection Parameters**
+
+1. AWS User
+
+<p>You'll need to create an AWS user which has access to load data into Redshift from S3. These credentials must be be set in the airflow UI as "aws", which will be picked up by the dags during execution.</p>
+
+2. Redshift Hostname
+
+<p>The redshift Hostname will need to be added into the Airflow UI as "redshift", which will be picked up by the dags during execution. </p>
+
+
+3. S3 Local Bucket Name
+
+<p>As mentioned above, set the bucket name as "local_bucket", which will be picked up by the dags during execution. </p>
 
 <br>
 
 ### Documentation
 
-1. Home
+1. Project Setup
 
 2. [Project Scope](docs/ProjectScope.md) 
 
