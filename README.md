@@ -49,7 +49,7 @@ Python 3.6.3
 
 **Prerequisites**
 
-<p>There are a number of prerequisites that need to be setup before the Airflow pipelines can be run. Within the Airflow folder there is a setup file (/airflow/setup.py) which should handle all of the dependencies. Just run from your command line environment as shown:</p>
+<p>There are a number of prerequisites that are required before the Airflow pipelines can be run. Within the Airflow folder there is a setup file (/airflow/setup.py) which should handle all of the dependencies. Just run from your command line environment as shown:</p>
 
 ```
 ## ./setup.py
@@ -68,19 +68,19 @@ pip install geopandas
 
 ```
 
-2. S3 Staging Bucket
+2. Creates an S3 Staging Bucket
 
 <p>The next dependency is to create a local S3 bucket to hold lookup data before being loaded into Redshift. This will act as a staging area for shape files. Remember that the bucket name must be set in airflow UI before DAGS can be run.</p>
 
 <br>
 
-**Redshift Cluster**
+**Create the Redshift Cluster**
 
 <p>As described within the project scope, the design requires a ra3.xlplus RA3 node cluster. Use the "create_cluster.sh" script in project root to spin up the cluster before running the DAGs.</p>
 
 <br>
 
-**Airflow Connection Parameters**
+**Set Airflow Connection Parameters**
 
 1. AWS User
 
