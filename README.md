@@ -13,7 +13,7 @@
 
 ### Project Index
 
-![Project Index](project_index.png)
+![Project Index](images/project_index.png)
 
 
 <br>
