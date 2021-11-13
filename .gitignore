@@ -3,3 +3,6 @@ misc/
 workspace.tar.gz
 id_rsa*
 .ipynb*
+aws.cfg
+taxi_zones*
+zones*

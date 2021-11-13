@@ -159,16 +159,17 @@ Payment Type:(Same as above)
 
 <br>
 
-#### Derived data - Uber API & calculated fields
+#### Derived data - calculated fields
 
-Derive the lat/long centroid from start Zone and end Zone. Pass these values to the uber api call: "GET /v1.2/estimates/price"
+Derive the lat/long centroid from start Zone and end Zone. Pass these values to the estimate_cost function.
 
 
-| Name            | Description                                        | Data Type     |
-|:---------------:|:--------------------------------------------------:|:-------------:|
-| Start Latitude  | Estimated Latitude base on centroid of taxi zone   | decimal(11,8) |
-| Start Longitude | Estimated Longitude base on centroid of taxi zone  | decimal(10,8) | 
-| End Latitude    | Estimated Latitude base on centroid of taxi zone   | decimal(11,8) |
-| End Longitude   | Estimated Longitude base on centroid of taxi zone  | decimal(10,8) |
-| Distance        | Geometric distance between start and end lat/long  | float         |
-| Estimated Cost  | Estimated cost of fair using API                   | float         |
+| Name              | Description                                        | Data Type     |
+|:---------------  :|:--------------------------------------------------:|:-------------:|
+| Start Latitude    | Estimated Latitude base on centroid of taxi zone   | decimal(11,8) |
+| Start Longitude   | Estimated Longitude base on centroid of taxi zone  | decimal(10,8) | 
+| End Latitude      | Estimated Latitude base on centroid of taxi zone   | decimal(11,8) |
+| End Longitude     | Estimated Longitude base on centroid of taxi zone  | decimal(10,8) |
+| Distance          | Geometric distance between start and end lat/long  | float         |
+| Duration          | Estimated duration                                 | float         |
+| Estimated of cost | Estimated cost of journey                          | float         |

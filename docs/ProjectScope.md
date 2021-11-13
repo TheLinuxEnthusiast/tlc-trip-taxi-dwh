@@ -37,7 +37,7 @@
 | Yellow Taxi     | New York city's medallion yellow taxis                                                                                     |
 | Green Taxi      | Street Hail Livery Taxis                                                                                                   |
 | FHV             | For hire Vehicles (Uber, lyft etc.)                                                                                        |
-| hvFHV           | Any FHV company that does +10,000 trips a day is High volume (hvFHV)                                                       |
+| FHVHV           | Any FHV company that does +10,000 trips a day is High volume (FHVHV)                                                       |
 | Borough         | Subset of NYC region were a taxi can pick up fairs (Queens, Brooklyn, Bronx etc)                                           |
 | Zone            | A borough contains smaller subsets called zones (There are 265 zones in NYC)                                               |
 | Trip            | A trip is defined as an individual or group of individuals travelling between two taxi zones (May be within the same zone) |
@@ -62,46 +62,50 @@
 
 <p>Files can vary in size between 100MB to +1GB or more. Due to COVID-19, passenger numbers have been much lower than usual for 2020. File size is expected to increase post covid due to higher demand. Files are deposited in an S3 bucket by the third party monitoring company with URI: "s3://nyc-tlc/trip data/".</p>
 
-4 Monthly files (Yellow, Green, FHV, hvFHV)
+4 Monthly files (Yellow, Green, FHV, FHVHV)
 
 | FilePattern                  | FileType | NumberOfRows   | NumberOfFields | Size       | Frequency  | S3 Path Location        |
 |-----------------------------:|:--------:|:--------------:|:--------------:|:----------:|:----------:|:-----------------------:|
 | yellow_tripdata_YYYY-MM.csv  | CSV      | 6-20 million   | 18             | 100-600MB  | Monthly    | s3://nyc-tlc/trip data/ |
 | green_tripdata_YYYY-MM.csv   | CSV      | 6-20 million   | 20             | 100-600MB  | Monthly    | s3://nyc-tlc/trip data/ |
-| fhvhv_tripdata_YYYY-MM.csv   | CSV      | 1-5 million    | 7              | 100-300MB  | Monthly    | s3://nyc-tlc/trip data/ |
-| fhv_tripdata_YYYY-MM.csv     | CSV      | +10 million    | 7              | +1GB       | Monthly    | s3://nyc-tlc/trip data/ |
+| fhv_tripdata_YYYY-MM.csv     | CSV      | +1 million     | 7              | 100-300MB  | Monthly    | s3://nyc-tlc/trip data/ |
+| fhvhv_tripdata_YYYY-MM.csv   | CSV      | +10 million    | 7              | +1GB       | Monthly    | s3://nyc-tlc/trip data/ |
 
 <br>
 
 #### 3.1.2 Additional datasets
 
-| FileName                          | FilePattern    | FileType(s)    | Size               | S3 Path Location   |
-|:---------------------------------:|:--------------:|:--------------:|:------------------:|:------------------:|
-| Taxi Zone and Borough Shapefiles  | taxi_zones.zip | shp; shx & prj | 1MB                | s3://nyc-tlc/misc/ |
+| FileName                          | FilePattern          | FileType(s)    | Size               | S3 Path Location    |
+|:---------------------------------:|:--------------------:|:--------------:|:------------------:|:------------------ :|
+| Taxi Zone and Borough Shapefiles  | taxi_zones.zip       | shp; shx & prj | 1MB                | s3://nyc-tlc/misc/  |
+| Taxi Base Information             | taxi_base_lookup.csv | csv            | 1.3KB              | s3://{local-bucket} |
 
-<p>This will be a once off load that will populate the dimension tables with taxi borough/zone information. There could be a possibility of slowly changing dimensions (SCD) as area may be re-zoned or additional zones added. A fresh file may need to be loaded into the warehouse once or twice a year. The ETL should be able handle this.</p>
+<p>Theses datasets will be loaded as dependencies for each dag load that will populate the dimension/fact tables with taxi zone and base information. There could be a possibility of slowly changing dimensions (SCD) as area may be re-zoned or additional zones added. Due to the small size of the files, fresh data will be loaded into the warehouse for each load. </p>
 
 <br>
 
-#### 3.1.3 Other Data Sources (Uber API)
+#### 3.1.3 Custom Calculated fields
 
-<p>The high frequency for hire vehicle (hvFHV) data does not have any cost or pricing included. This will need to be estimated using the uber API:</p>
+<p>The for hire vehicle (FHVHV & FHV) datasets do not have any cost or pricing included. This will need to be estimated using custom functions. Cost will be based on the Uber pricing model defined as follows:</p>
 
-[Documentation on Uber API Estimate](https://developer.uber.com/docs/riders/references/api/v1.2/estimates-price-get)
+[Uber pricing Model](https://www.uber.com/global/en/price-estimate/)
 
-<p>Uber uses three parameters to calculate cost</p>
 
-1. Base rate (time & distance)
+```
+fair_cost = minimum_fair + booking_fee + (distance*per_mile_cost) + (duration*per_min_cost)
 
-2. Booking fee
+Assuming defaults for the following (dollars):
+booking_fee = 2.35
+minimum_fair = 7.72
+per_min_cost = 0.25
+per_mile_cost = 0.96
+```
 
-3. Busy times/areas.
+<br>
 
-<p>The client provides the latitude/longitude of source and destination and a price estimate is returned based on parameters mentioned.</p>
+<p>Assumptions for calculating cost:</p>
 
-<p> The call "GET /v1.2/estimates/price" can be used to roughly gauge how much the fare will cost but it may not be completely accurate. The following assumptions and limitations have been defined below:</p>
-
-1. Latitude and Longitude are estimated based on Zone. The centroid of the zone shapefile polygon is taken from both the starting location zone and ending location zone. This is then passed to the /v1.2/estimates/price call. If the start and end are in the same zone a flat base rate is assumed. 
+1. Latitude and Longitude are estimated based on Zone. The centroid of the zone shapefile polygon is taken from both the starting location zone and ending location zone. 
 
 2. We have no information relating to peak time or drivers availablity which would increase the price for a limited period. We are taking the same estimated pricing for all trips regardless of when they happened.
 
