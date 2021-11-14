@@ -55,24 +55,24 @@
 
 1. yellow_dag
 
-![YellowDag](../images/yellow.png)
+![YellowDag](../images/yellow_dag.PNG)
 
 2. green_dag
 
-![GreenDag](../images/green.png)
+![GreenDag](../images/green_dag.PNG)
 
 3. fhv_dag
 
-![FHVDag](../images/fhv.png)
+![FHVDag](../images/fhv_dag.PNG)
 
 4. fhvhv_dag
 
-![FHVHVDag](../images/fhvhv.png)
+![FHVHVDag](../images/fhvhv_dag.PNG)
 
 5. taxi_base_lookup_dag
 
-![TaxiBase](../images/taxi_base.png)
+![TaxiBase](../images/taxi_base_dag.PNG)
 
 6. taxi_zone_lookup_dag
 
-![TaxiZone](../images/taxi_zone.png)
+![TaxiZone](../images/taxi_zone_dag.PNG)
