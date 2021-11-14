@@ -95,6 +95,11 @@ pip install geopandas
 
 <p>As mentioned above, set the bucket name as "local_bucket", which will be picked up by the dags during execution. </p>
 
+
+4. Add HOME_ variable to indicate DAG home directory
+
+<p>Location of the Home directory where dags are located. (Default: /home/workspace/airflow/dags)</p>
+
 <br>
 
 ### Documentation

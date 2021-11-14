@@ -5,3 +5,4 @@ id_rsa*
 aws.cfg
 taxi_zones*
 zones*
+airflow.tar.gz
