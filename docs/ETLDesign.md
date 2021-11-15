@@ -26,7 +26,7 @@
 The pipelines would be run on a daily basis by 7 am every day. (e.g. Changed from monthly loads to daily loads)
 ```
 
-<p>The input files are released on a monthly basis and using a "filename_YYYY-MM.csv" naming convention. If the frequency was changed to daily instead of monthly, the file naming convention would need to be dated with the correct day in the form "filename_YYYY-MM-DD.csv". This would require minimal changes within the DAGs. We would need to change the expected file patten to include "day" and the pipeline should run as expected. </p>
+<p>The input files are released on a monthly basis using a "filename_YYYY-MM.csv" naming convention. If the frequency was changed to daily instead of monthly, the file naming convention would need to be dated with the correct day in the form "filename_YYYY-MM-DD.csv". This would require minimal changes within the DAGs. We would need to change the expected file patten to include "day" and the pipeline should run as expected. </p>
 
 <p>So for example, within yellow_dag.py we have the following S3ToStaging operator which loads the input data into staging.</p>
 
@@ -39,13 +39,13 @@ load_yellow_staging_table = S3ToStaging(
     )
 ```
 
-<p>You would just need to change the "s3_key" input parameter string to handle daily files and the job should run as expected. With repect to scheduling the job, we could set the schedule_interval="@daily" which would kick off the daily jobs at 12:00am which would complete well before 7am. </p>
+<p>You would just need to change the "s3_key" input parameter string to handle daily files and the job should run as expected. With repect to scheduling of the job, we could set the schedule_interval="@daily" which would kick off the daily jobs at 12:00am which would complete well before 7am. </p>
 
 <br>
 
 ### 6.1 Requirements
 
-<p>As shown below, airflow meets all of our requirements for this use case. Airflow is python based which shorterns the learning curve for teams managing the new implementation. Airflow can be deployed as cluster so it can scale as the workload increases or if new feeds are added. </p>
+<p>As shown below, airflow meets all of our requirements for this use case. Airflow is python based which shorterns the learning curve for teams managing the new implementation. Airflow can be deployed as a cluster so it can scale as the workload increases or if new feeds are added. </p>
 
 | Requirements for New Orchestration tool                                      |
 |:----------------------------------------------------------------------------:|
@@ -76,7 +76,7 @@ load_yellow_staging_table = S3ToStaging(
 
 1. Issue 1: Null Values
 
-<p>A number of the source columns contain null values; vendor_id, ratecodeid, payment_type etc. In order to resolve this issue an SP was created that looks for null values in the target staging table and replaces them with the appropriate string.</p>
+<p>A number of the source columns contain null values; vendor_id, ratecodeid, payment_type etc. To resolve this issue an SP was created that looks for null values in the staging table and replaces them with the appropriate string.</p>
 
 ```
 CREATE OR REPLACE PROCEDURE replace_nulls(
@@ -136,7 +136,7 @@ CREATE OR REPLACE PROCEDURE replace_nulls(
 
 2. Issue 2: Zero passengers recorded
 
-<p>Occasionally, a trip is recorded with 0 passengers. This doesn't make sence as there must be at least 1 passenger. This metric is self reported by the driver so that may explain the unusual numbers. This can be resolved using another SP.</p>
+<p>Occasionally, a trip is recorded with 0 passengers. This doesn't make sense as there must be at least 1 passenger. This metric is self reported by the driver so that may explain the unusual numbers. This can be resolved using another SP.</p>
 
 ```
 CREATE OR REPLACE PROCEDURE replace_zero_passenger(
@@ -201,7 +201,7 @@ CREATE OR REPLACE PROCEDURE replace_zero_ratecode(
 
 **Staging Data Quality Check**
 
-<p>This checks that the column names amd number of rows are as expected before loading into the star schema. The StagingDataQuality operator takes a staging table name as an argument as shown.</p>
+<p>This checks that the column names and number of rows are as expected before loading into the star schema. The StagingDataQuality operator takes a staging table name as an argument, as shown below.</p>
 
 ```
 yellow_data_quality_check = StagingDataQuality(
@@ -224,7 +224,7 @@ prod_data_quality_check = ProdDataQualityCheck(
 
 ### 6.4 DAG List
 
-<p>DAGs 1-4 are the primary data pipelines. DAGs 5-6 are to refresh the taxi base and zone lookup data in the staging tables. The design frequency is set to "monthly", as files are created each month and deposited into the source S3 bucket. Each of the primary 4 DAGs can run independantly and load data into the Data warehouse Star schema. </p>
+<p>DAGs 1-4 are the primary data pipelines. DAGs 5-6 are to refresh the taxi base and zone lookup data in the staging tables. The design frequency is set to "monthly", as files are created each month and deposited into the source S3 bucket. Each of the primary 4 DAGs can run independantly and load data into the Data Warehouse Star schema. </p>
 
 
 | ID  | File Name               | Description                                      | Dag ID                   | Frequency  |
@@ -237,7 +237,7 @@ prod_data_quality_check = ProdDataQualityCheck(
 | 6   | taxi_zone_lookup_dag.py | Loads taxi zone lookup data into staging tables  | tlc_taxi_zone_lookup_etl | @Monthly   |
 
 
-<p>The four primary DAGS have simular structure. First dependencies are loaded; this includes all stored procedures and functions required for ETL. Next, data is loaded into staging tables and a basic data quality check is run to validate number of columns and rows. Data is then loaded into the dimensions first, follows by a full load into the trip_fact table. A follow up validation check is done in order to ensure data was loaded correctly.</p>
+<p>The four primary DAGS have simular structure. First, dependencies are loaded; this includes all stored procedures and functions required for ETL. Next, data is loaded into staging tables and a basic data quality check is run to validate the number of columns and rows. Data is then loaded into the dimensions first, follows by a full load into the trip_fact table. A follow up validation check is done in order to ensure data was loaded correctly.</p>
 
 <br>
 
