@@ -50,7 +50,7 @@
 #### 5.3 Physical Model
 
 
-1. pubic.time_dim
+1. public.time_dim
 
 ```
 CREATE TABLE IF NOT EXISTS public.time_dim (
