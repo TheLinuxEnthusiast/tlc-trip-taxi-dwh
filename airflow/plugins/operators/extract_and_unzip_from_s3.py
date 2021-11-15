@@ -19,7 +19,7 @@ def extract_and_unzip_from_s3(*args, **kwargs):
     tmp_dir = f"{home_}/tmp"
     
     config = configparser.ConfigParser()
-    config.read(f"{home_}/aws.cfg")
+    config.read(f"{home_}/aws-master.cfg")
     
     AWS_ACCESS_KEY = config['MASTER']['AWS_ACCESS_KEY']
     AWS_SECRET_KEY = config['MASTER']['AWS_SECRET_KEY']

@@ -37,34 +37,40 @@ class ProdDataQualityCheck(BaseOperator):
         credentials = aws_hook.get_credentials()
         redshift = PostgresHook(postgres_conn_id=self.redshift_conn_id)
         
-    # Check Number of rows in dimensions is not zero
-    try:
-        self.log.info(f"Checking dimensions for accurate row counts.....")
-        for key, value in ProdDataQualityCheck.dims.items():
-            sql_formatted = ProdDataQualitySQL.check_dim_count.format(f"public.{key}_dim")
-            result = redshift.run(sql_formatted)
-            if key == "time":
-                if result[0][0] > 0:
-                    pass
-                else:
-                    raise(f"Issue with number of rows in {key} dimension")
-            elif key == "taxi_base":
-                if result[0][0] in value:
-                    pass
-                else:
-                    raise(f"Issue with number of rows in {key} dimension")
-            elif result[0][0] != value:
-                raise(f"Issue with number of rows in {key} dimension")
+        # Check Number of rows in dimensions is not zero
+        try:
+            self.log.info(f"Checking dimensions for accurate row counts.....")
+            conn = redshift.get_conn()
+            cursor = conn.cursor()
+            
+            for key, value in ProdDataQualityCheck.dims.items():
+                sql_formatted = ProdDataQualitySQL.check_dim_count.format(f"public.{key}_dim")
+                cursor.execute(sql_formatted)
+                result = cursor.fetchall()
+                self.log.info(f"{result}")
                 
-    except Exceptions as e:
-        print(e)
-        raise("Issues checking row count")
+                if key == "time":
+                    if result[0][0] > 0:
+                        pass
+                    else:
+                        raise(f"Issue with number of rows in {key} dimension")
+                elif key == "taxi_base":
+                    if result[0][0] in value:
+                        pass
+                    else:
+                        raise(f"Issue with number of rows in {key} dimension")
+                elif result[0][0] != value:
+                    raise(f"Issue with number of rows in {key} dimension")
+
+        except Exception as e:
+            print(e)
+            raise("Issues checking row count")
+
     
-    
-    # Check if rows were inserted into fact
-    # Check fact insert date TODO
-    
-    
-    # Run a sample query and check results were as expected
+        # Check if rows were inserted into fact
+        # Check fact insert date TODO
+        
+
+        # Run a sample query and check results were as expected
     
         

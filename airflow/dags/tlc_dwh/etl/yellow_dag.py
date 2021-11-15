@@ -133,30 +133,22 @@ with DAG(
         source="yellow",
         schema="public"
     )
-    """
+    
     prod_data_quality_check = ProdDataQualityCheck(
         task_id="prod_data_quality_check",
         
     )
-    """
+    
     end_operator = DummyOperator(
         task_id="End_execution"
     )
-    """
-    start_operator >> [load_dependencies, load_taxi_base_data, load_taxi_zone_data]
-    [load_dependencies, load_taxi_base_data, load_taxi_zone_data] >> load_yellow_staging_table
-    load_yellow_staging_table >> yellow_data_quality_check
-    yellow_data_quality_check >> clean_staging_data
-    clean_staging_data >> [load_time_dim, load_location_dim, load_vendor_dim, load_ratecode_dim, load_payment_type_dim]
-    [load_time_dim,load_location_dim, load_vendor_dim, load_ratecode_dim, load_payment_type_dim] >> end_operator
-    >> prod_data_quality_check
-    prod_data_quality_check 
-    """
+    
     start_operator >> [load_dependencies, load_taxi_base_data, load_taxi_zone_data]
     [load_dependencies, load_taxi_base_data, load_taxi_zone_data] >> load_yellow_staging_table
     load_yellow_staging_table >> yellow_data_quality_check
     yellow_data_quality_check >> clean_staging_data
     clean_staging_data >> [load_time_dim, load_location_dim, load_vendor_dim, load_ratecode_dim, load_payment_type_dim, load_taxi_base_dim, load_trip_type_dim]
     [load_time_dim, load_location_dim, load_vendor_dim, load_ratecode_dim, load_payment_type_dim, load_taxi_base_dim, load_trip_type_dim] >> load_fact
-    load_fact >> end_operator
+    load_fact >> prod_data_quality_check
+    prod_data_quality_check >> end_operator
     

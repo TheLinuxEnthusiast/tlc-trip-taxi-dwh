@@ -11,7 +11,8 @@ class InsertQueriesSQL:
         week,
         month,
         year,
-        day_of_week
+        day_of_week,
+        insertion_datetime
         )
         SELECT DISTINCT
                        x.event_datetime,
@@ -20,7 +21,8 @@ class InsertQueriesSQL:
                        x.week,
                        x.month,
                        x.year,
-                       x.day_of_week
+                       x.day_of_week,
+                       getdate() as insertion_datetime
                 FROM (
                     SELECT
                         CAST({} as datetime) as event_datetime,
@@ -56,7 +58,8 @@ class InsertQueriesSQL:
               week,
               month,
               year,
-              day_of_week
+              day_of_week,
+              insertion_datetime
               )
           SELECT 
             event_datetime,
@@ -65,7 +68,8 @@ class InsertQueriesSQL:
             week,
             month,
             year,
-            day_of_week
+            day_of_week,
+            insertion_datetime
           FROM time_temp;
     
         END TRANSACTION;
@@ -82,14 +86,16 @@ class InsertQueriesSQL:
         location_id,
         borough,
         zone,
-        geometry
+        geometry,
+        insertion_datetime
         )
         SELECT 
                 ROW_NUMBER() OVER() as location_key_id,  
                 location_id,
                 borough,
                 zone,
-                geometry
+                geometry,
+                getdate() as insertion_datetime
        FROM taxi_zone_lookup_staging;
 
     BEGIN TRANSACTION;
@@ -104,14 +110,16 @@ class InsertQueriesSQL:
         location_id,
         borough,
         zone,
-        geometry
+        geometry,
+        insertion_datetime
         )
         SELECT
           location_key_id,
           location_id,
           borough,
           zone,
-          geometry
+          geometry,
+          insertion_datetime
         FROM location_temp;
 
 
@@ -124,13 +132,15 @@ class InsertQueriesSQL:
     CREATE TEMP TABLE IF NOT EXISTS vendor_temp (
     vendor_key_id int4 NOT NULL,
     vendor_id int4 NOT NULL,
-    vendor_description varchar(255) NOT NULL
+    vendor_description varchar(255) NOT NULL,
+    insertion_datetime datetime NOT NULL
     );
 
     INSERT INTO vendor_temp (
         vendor_key_id,
         vendor_id,
-        vendor_description
+        vendor_description,
+        insertion_datetime
         )
     SELECT
         ROW_NUMBER() OVER() as vendor_key_id,
@@ -138,7 +148,8 @@ class InsertQueriesSQL:
         CASE 
             WHEN s.vendor_id = 1 THEN 'Creative Mobile Technologies LLC'
             WHEN s.vendor_id = 2 THEN 'VeriFone Inc'
-            ELSE 'Unknown' END AS vendor_description
+            ELSE 'Unknown' END AS vendor_description,
+        getdate() as insertion_datetime
         FROM (
             SELECT CAST('1' as int4) as vendor_id
               UNION
@@ -156,12 +167,14 @@ class InsertQueriesSQL:
     INSERT INTO public.vendor_dim (
         vendor_key_id,
         vendor_id,
-        vendor_description
+        vendor_description,
+        insertion_datetime
         )
         SELECT
         vendor_key_id,
         vendor_id,
-        vendor_description
+        vendor_description,
+        insertion_datetime
         FROM vendor_temp;
 
 
@@ -177,7 +190,8 @@ class InsertQueriesSQL:
     INSERT INTO ratecode_temp (
         ratecode_key_id,
         ratecode_id,
-        ratecode_description
+        ratecode_description,
+        insertion_datetime
         )
         SELECT
         ROW_NUMBER() OVER() as ratecode_key_id,
@@ -190,7 +204,8 @@ class InsertQueriesSQL:
             WHEN s.ratecode_id = 5 THEN 'Negotiated fare'
             WHEN s.ratecode_id = 6 THEN 'Group ride'
             WHEN s.ratecode_id = 99 THEN 'Unknown'
-            END AS ratecode_description
+            END AS ratecode_description,
+        getdate() as insertion_datetime
         FROM (
           SELECT CAST('1' as int4) as ratecode_id
               UNION
@@ -217,12 +232,14 @@ class InsertQueriesSQL:
     INSERT INTO public.ratecode_dim (
         ratecode_key_id,
         ratecode_id,
-        ratecode_description
+        ratecode_description,
+        insertion_datetime
         )
       SELECT
       ratecode_key_id,
       ratecode_id,
-      ratecode_description
+      ratecode_description,
+      insertion_datetime
       FROM ratecode_temp;
 
 
@@ -238,7 +255,8 @@ class InsertQueriesSQL:
     INSERT INTO payment_type_temp(
         payment_type_key_id,
         payment_type_id,
-        payment_type_description
+        payment_type_description,
+        insertion_datetime
         )
         SELECT
             ROW_NUMBER() OVER() as payment_type_key_id,
@@ -250,7 +268,8 @@ class InsertQueriesSQL:
                 WHEN s.payment_type_id = 4 THEN 'Dispute'
                 WHEN s.payment_type_id = 5 THEN 'Unknown'
                 WHEN s.payment_type_id = 6 THEN 'Voided trip'
-                ELSE 'Unknown' END AS payment_type_description
+                ELSE 'Unknown' END AS payment_type_description,
+             getdate() as insertion_datetime
          FROM (
         SELECT CAST('1' as int4) as payment_type_id
           UNION
@@ -277,12 +296,14 @@ class InsertQueriesSQL:
     INSERT INTO public.payment_type_dim (
         payment_type_key_id,
         payment_type_id,
-        payment_type_description
+        payment_type_description,
+        insertion_datetime
         )
       SELECT
         payment_type_key_id,
         payment_type_id,
-        payment_type_description
+        payment_type_description,
+        insertion_datetime
       FROM payment_type_temp;
 
 
@@ -300,14 +321,16 @@ class InsertQueriesSQL:
         taxi_base_description,
         high_volume_license_number,
         base_name, 
-        app_company_affiliation
+        app_company_affiliation,
+        insertion_datetime
         )
         SELECT
               fs.taxi_base_key_id,
-              'FHV taxi Base' AS taxi_base_description,
+              'FHV' AS taxi_base_description,
               NULL AS high_volume_license_number,
               'None' as base_name,
-              'Uber or Lyft' AS app_company_affiliation
+              'Uber or Lyft' AS app_company_affiliation,
+              getdate() as insertion_datetime
               FROM (
                 SELECT DISTINCT
                   dispatching_base_num as taxi_base_key_id
@@ -325,14 +348,16 @@ class InsertQueriesSQL:
         taxi_base_description,
         high_volume_license_number,
         base_name, 
-        app_company_affiliation
+        app_company_affiliation,
+        insertion_datetime
         )
         SELECT
         taxi_base_key_id,
         taxi_base_description,
         high_volume_license_number,
         base_name, 
-        app_company_affiliation
+        app_company_affiliation,
+        insertion_datetime
         FROM taxi_base_temp;
 
     END TRANSACTION;
@@ -349,11 +374,20 @@ class InsertQueriesSQL:
         taxi_base_description,
         high_volume_license_number,
         base_name, 
-        app_company_affiliation
+        app_company_affiliation,
+        insertion_datetime
         )
+        SELECT 
+            sq.taxi_base_key_id,
+            sq.taxi_base_description,
+            sq.high_volume_license_number,
+            sq.base_name,
+            sq.app_company_affiliation,
+            getdate() as insertion_datetime
+            FROM (
         SELECT
           licensenumber as taxi_base_key_id,
-          'FHV_HV taxi Base' AS taxi_base_description,
+          'FHV_HV' AS taxi_base_description,
           highvolumelicensenumber AS high_volume_license_number,
           basename AS base_name,
           appcompanyaffiliation AS app_company_affiliation
@@ -363,7 +397,7 @@ class InsertQueriesSQL:
 
           SELECT
              'YW0001' AS taxi_base_key_id,
-             'Yellow Taxi Base' AS taxi_base_description,
+             'Yellow' AS taxi_base_description,
              NULL AS high_volume_license_number,
              'None' AS base_name,
              'Curb or Arro' AS app_company_affiliation
@@ -372,10 +406,11 @@ class InsertQueriesSQL:
 
            SELECT
              'GN0001' AS taxi_base_key_id,
-             'Green Taxi Base' AS taxi_base_description,
+             'Green' AS taxi_base_description,
              NULL AS high_volume_license_number,
              'None' AS base_name,
-             'Curb or Arro' AS app_company_affiliation;
+             'Curb or Arro' AS app_company_affiliation
+             ) sq;
 
     BEGIN TRANSACTION;
 
@@ -389,14 +424,16 @@ class InsertQueriesSQL:
         taxi_base_description,
         high_volume_license_number,
         base_name, 
-        app_company_affiliation
+        app_company_affiliation,
+        insertion_datetime
         )
         SELECT
         taxi_base_key_id,
         taxi_base_description,
         high_volume_license_number,
         base_name, 
-        app_company_affiliation
+        app_company_affiliation,
+        insertion_datetime
         FROM taxi_base_temp;
 
 
@@ -412,7 +449,8 @@ class InsertQueriesSQL:
     INSERT INTO trip_type_temp (
         trip_type_key_id,
         trip_type_id,
-        trip_type_description
+        trip_type_description,
+        insertion_datetime
         )
         SELECT 
             ROW_NUMBER() OVER() as trip_type_key_id,
@@ -421,7 +459,8 @@ class InsertQueriesSQL:
                   WHEN s.trip_type_id = 1 THEN 'Street Hail'
                   WHEN s.trip_type_id = 2 THEN 'Dispatch'
                   WHEN s.trip_type_id = 0 THEN 'Unknown'
-                  END as trip_type_description
+                  END as trip_type_description,
+              getdate() as insertion_datetime
         FROM (
           SELECT
              CAST('1' as int4) as trip_type_id
@@ -443,12 +482,14 @@ class InsertQueriesSQL:
     INSERT INTO public.trip_type_dim (
         trip_type_key_id,
         trip_type_id,
-        trip_type_description
+        trip_type_description,
+        insertion_datetime
         )
       SELECT
         trip_type_key_id,
         trip_type_id,
-        trip_type_description
+        trip_type_description,
+        insertion_datetime
       FROM trip_type_temp;
 
     END TRANSACTION;
@@ -467,6 +508,7 @@ class InsertQueriesSQL:
     do_location_key_id,
     passenger_count,
     ratecode_key_id,
+    trip_duration,
     trip_distance,
     store_and_fwd_flag,
     payment_type_key_id,
@@ -479,7 +521,8 @@ class InsertQueriesSQL:
     total_amount,
     congestion_surcharge,
     ehail_fee,
-    trip_type_key_id
+    trip_type_key_id,
+    insertion_datetime
     )
     SELECT
       'YW0001' as taxi_base_key_id,
@@ -490,6 +533,7 @@ class InsertQueriesSQL:
       ld_do.location_key_id,
       CAST(passenger_count as int4) as passenger_count,
       rcd.ratecode_key_id,
+      calculate_duration(pickup_datetime, dropoff_datetime) as duration,
       CAST(trip_distance as decimal(19,11)) as trip_distance,
       CASE 
         WHEN store_and_fwd_flag = 'N' THEN CAST('0' as int4)
@@ -505,7 +549,8 @@ class InsertQueriesSQL:
       CAST(total_amount as decimal(19,11)) as total_amount,
       CAST(congestion_surcharge as decimal(19,11)) as congestion_surcharge,
       CAST('0.0' as decimal(19,11)) as ehail_fee,
-      CAST('1' as int4) as trip_type_key_id
+      CAST('1' as int4) as trip_type_key_id,
+      getdate() as insertion_datetime
     FROM yellow_staging ys
     JOIN vendor_dim vd
     ON vd.vendor_id = ys.vendorid
@@ -530,6 +575,7 @@ class InsertQueriesSQL:
     do_location_key_id,
     passenger_count,
     ratecode_key_id,
+    trip_duration,
     trip_distance,
     store_and_fwd_flag,
     payment_type_key_id,
@@ -542,7 +588,8 @@ class InsertQueriesSQL:
     total_amount,
     congestion_surcharge,
     ehail_fee,
-    trip_type_key_id
+    trip_type_key_id,
+    insertion_datetime
     )
     SELECT
       'GN0001' as taxi_base_key_id,
@@ -553,6 +600,7 @@ class InsertQueriesSQL:
       ld_do.location_key_id,
       CAST(passenger_count as int4) as passenger_count,
       rcd.ratecode_key_id,
+      calculate_duration(pickup_datetime, dropoff_datetime) as duration,
       CAST(trip_distance as decimal(19,11)) as trip_distance,
       CASE 
         WHEN store_and_fwd_flag = 'N' THEN CAST('0' as int4)
@@ -568,7 +616,8 @@ class InsertQueriesSQL:
       CAST(total_amount as decimal(19,11)) as total_amount,
       CAST(congestion_surcharge as decimal(19,11)) as congestion_surcharge,
       CAST(ehail_fee as decimal(19,11)) as ehail_fee,
-      ttd.trip_type_key_id
+      ttd.trip_type_key_id,
+      getdate() as insertion_datetime
     FROM green_staging gs
     JOIN vendor_dim vd
     ON vd.vendor_id = gs.vendorid
@@ -595,6 +644,7 @@ class InsertQueriesSQL:
     do_location_key_id,
     passenger_count,
     ratecode_key_id,
+    trip_duration,
     trip_distance,
     store_and_fwd_flag,
     payment_type_key_id,
@@ -607,7 +657,8 @@ class InsertQueriesSQL:
     total_amount,
     congestion_surcharge,
     ehail_fee,
-    trip_type_key_id
+    trip_type_key_id,
+    insertion_datetime
     )
     SELECT
       tbd.taxi_base_key_id,
@@ -621,6 +672,7 @@ class InsertQueriesSQL:
             WHEN sr_flag = '0' THEN CAST('1' as int4)
             END as passenger_count,
       CAST('1' as int4) as ratecode_key_id,
+      calculate_duration(pickup_datetime, dropoff_datetime) as duration,
       CAST(haversine(tzls_pu.centroid_y, 
                      tzls_pu.centroid_x, 
                      tzls_do.centroid_y, 
@@ -628,7 +680,7 @@ class InsertQueriesSQL:
       CAST('0' as int4) as store_and_fwd_flag,
       CAST('1' as int4) as payment_type_key_id,
       CAST(estimate_fair(trip_distance, 
-                         calculate_duration(pickup_datetime, dropoff_datetime)
+                         duration
                          ) as decimal(19,11)) as fare_amount,
       CAST('0.0' as decimal(19,11)) as extra,
       CAST('0.0' as decimal(19,11)) as mta_tax,
@@ -638,7 +690,8 @@ class InsertQueriesSQL:
       CAST(fare_amount as decimal(19,11)) as total_amount,
       CAST('0.0' as decimal(19,11)) as congestion_surcharge,
       CAST('0.0' as decimal(19,11)) as ehail_fee,
-      CAST('2' as int4) as trip_type_key_id
+      CAST('2' as int4) as trip_type_key_id,
+      getdate() as insertion_datetime
     FROM fhv_staging fs
     JOIN taxi_zone_lookup_staging tzls_pu
     ON tzls_pu.location_id = fs.pulocationid
@@ -662,6 +715,7 @@ class InsertQueriesSQL:
     do_location_key_id,
     passenger_count,
     ratecode_key_id,
+    trip_duration,
     trip_distance,
     store_and_fwd_flag,
     payment_type_key_id,
@@ -674,7 +728,8 @@ class InsertQueriesSQL:
     total_amount,
     congestion_surcharge,
     ehail_fee,
-    trip_type_key_id
+    trip_type_key_id,
+    insertion_datetime
     )
     SELECT
       tbd.taxi_base_key_id,
@@ -694,8 +749,9 @@ class InsertQueriesSQL:
                      tzls_do.centroid_x) as decimal(19,11)) as trip_distance,
       CAST('0' as int4) as store_and_fwd_flag,
       CAST('1' as int4) as payment_type_key_id,
+      calculate_duration(pickup_datetime, dropoff_datetime) as duration,
       CAST(estimate_fair(trip_distance, 
-                         calculate_duration(pickup_datetime, dropoff_datetime)
+                         duration
                          ) as decimal(19,11)) as fare_amount,
       CAST('0.0' as decimal(19,11)) as extra,
       CAST('0.0' as decimal(19,11)) as mta_tax,
@@ -705,7 +761,8 @@ class InsertQueriesSQL:
       CAST(fare_amount as decimal(19,11)) as total_amount,
       CAST('0.0' as decimal(19,11)) as congestion_surcharge,
       CAST('0.0' as decimal(19,11)) as ehail_fee,
-      CAST('2' as int4) as trip_type_key_id
+      CAST('2' as int4) as trip_type_key_id,
+      getdate() as insertion_datetime
     FROM fhvhv_staging fs
     JOIN taxi_zone_lookup_staging tzls_pu
     ON tzls_pu.location_id = fs.pulocationid

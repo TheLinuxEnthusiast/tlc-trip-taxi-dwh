@@ -26,7 +26,7 @@ class CreateFactTableSQL:
         congestion_surcharge decimal(19,11),
         ehail_fee decimal(19,11),
         trip_type_key_id int4 NOT NULL,
-        -- sr_flag ??
+        insertion_datetime datetime NOT NULL,
         CONSTRAINT trip_pkey PRIMARY KEY (trip_key_id),
         FOREIGN KEY(taxi_base_key_id) REFERENCES public.taxi_base_dim(taxi_base_key_id),
         FOREIGN KEY(vendor_key_id) REFERENCES public.vendor_dim(vendor_key_id),

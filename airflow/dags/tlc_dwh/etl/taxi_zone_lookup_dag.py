@@ -43,13 +43,6 @@ with DAG(
         task_id="Begin_execution"
     )
     
-    """
-    install_pip_dependencies = BashOperator(
-        task_id="install_missing_dependencies",
-        bash_command=f"HOME_={HOME_}; chmod +x $HOME_/pip_dependencies.sh; /bin/bash $HOME_/pip_dependencies.sh "
-    )
-    """
-    
     extract_zip_from_s3 = PythonOperator(
         task_id="extract_zip_from_s3",
         python_callable=extract_and_unzip_from_s3,
