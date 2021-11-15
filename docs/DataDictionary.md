@@ -165,7 +165,7 @@ Derive the lat/long centroid from start Zone and end Zone. Pass these values to 
 
 
 | Name              | Description                                        | Data Type     |
-|:---------------  :|:--------------------------------------------------:|:-------------:|
+|:-----------------:|:--------------------------------------------------:|:-------------:|
 | Start Latitude    | Estimated Latitude base on centroid of taxi zone   | decimal(11,8) |
 | Start Longitude   | Estimated Longitude base on centroid of taxi zone  | decimal(10,8) | 
 | End Latitude      | Estimated Latitude base on centroid of taxi zone   | decimal(11,8) |
