@@ -65,7 +65,7 @@
 4 Monthly files (Yellow, Green, FHV, FHVHV)
 
 | FilePattern                  | FileType | NumberOfRows   | NumberOfFields | Size       | Frequency  | S3 Path Location        |
-|-----------------------------:|:--------:|:--------------:|:--------------:|:----------:|:----------:|:-----------------------:|
+|:----------------------------:|:--------:|:--------------:|:--------------:|:----------:|:----------:|:-----------------------:|
 | yellow_tripdata_YYYY-MM.csv  | CSV      | 6-20 million   | 18             | 100-600MB  | Monthly    | s3://nyc-tlc/trip data/ |
 | green_tripdata_YYYY-MM.csv   | CSV      | 6-20 million   | 20             | 100-600MB  | Monthly    | s3://nyc-tlc/trip data/ |
 | fhv_tripdata_YYYY-MM.csv     | CSV      | +1 million     | 7              | 100-300MB  | Monthly    | s3://nyc-tlc/trip data/ |
@@ -76,7 +76,7 @@
 #### 3.1.2 Additional datasets
 
 | FileName                          | FilePattern          | FileType(s)    | Size               | S3 Path Location    |
-|:---------------------------------:|:--------------------:|:--------------:|:------------------:|:------------------ :|
+|:---------------------------------:|:--------------------:|:--------------:|:------------------:|:-------------------:|
 | Taxi Zone and Borough Shapefiles  | taxi_zones.zip       | shp; shx & prj | 1MB                | s3://nyc-tlc/misc/  |
 | Taxi Base Information             | taxi_base_lookup.csv | csv            | 1.3KB              | s3://{local-bucket} |
 
