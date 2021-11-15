@@ -25,13 +25,13 @@
 <p>Airflow DAG's were written and tested in ubuntu 16.04 VM running Airflow version 1.10.2 installed in python 3.6</p>
 
 ```
-## uname -a 
+# uname -a 
 Linux 0ed8a3d2ab28 4.15.0-1098-gcp #111~16.04.1-Ubuntu SMP Tue Apr 13 19:05:08 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
 ```
 
 
 ```
-## airflow version
+# airflow version
   ____________       _____________
  ____    |__( )_________  __/__  /________      __
 ____  /| |_  /__  ___/_  /_ __  /_  __ \_ | /| / /
@@ -41,7 +41,7 @@ ___  ___ |  / _  /   _  __/ _  / / /_/ /_ |/ |/ /
 ```
 
 ```
-## python --version
+# python --version
 Python 3.6.3
 ```
 
@@ -52,7 +52,7 @@ Python 3.6.3
 <p>There are a number of prerequisites that are required before the Airflow pipelines can be run. Within the Airflow folder there is a setup file (/airflow/setup.py) which should handle all of the dependencies. Just run from your command line environment as shown:</p>
 
 ```
-## ./setup.py
+# ./setup.py
 ```
 
 This script does two things:
@@ -77,6 +77,14 @@ pip install geopandas
 **Create the Redshift Cluster**
 
 <p>As described within the project scope, the design requires a ra3.xlplus RA3 node cluster. Use the "create_cluster.sh" script in project root to spin up the cluster before running the DAGs.</p>
+
+```
+# ./create_cluster -h
+./create_cluster.sh [-h|help] [-T|testing] [-P|production] [-d|delete] <cluster-identifier>
+
+# ./create_cluster.sh -P
+creating cluster......
+```
 
 <br>
 
