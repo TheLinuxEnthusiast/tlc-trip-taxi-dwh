@@ -49,17 +49,34 @@ Python 3.6.3
 
 **Prerequisites**
 
-<p>There are a number of prerequisites that are required before the Airflow pipelines can be run. Within the Airflow folder there is a setup file (/airflow/setup.py) which should handle all of the dependencies. Just run from your command line environment as shown:</p>
+<p>There are a number of prerequisites that are required before the Airflow pipelines can be run.</p>
+
+1. Create an AWS User
+
+<p>Create an AWS user that has permission to copy data from S3 into redshift. The user should also have permissions to connect and query redshift. For simplicity you can add the below policies. </p>
+
+![AWS Access](images/aws_access.PNG)
+
+
+2. Update the aws-master.cfg file located at /airflow/dags/aws-master.cfg with your AWS user key & secret key.
+
+<p>The setup.py script depends upon the config being set before running.</p>
+
+<br>
+
+**Run setup.py (Optional)**
+
+<p>Within the Airflow folder there is a setup file (/airflow/setup.py) which should handle all of the airflow DAG dependencies. Just run from your command line environment as shown:</p>
 
 ```
-# ./setup.py
+# python ./setup.py "your-local-bucket-name"
 ```
 
 This script does two things:
 
 1. Installs Python Packages
 
-<p>The ETL pipelines process and load geometric shape data which heavily relies on the geopandas (version: geopandas==0.9.0) package in python 3.6. This must be installed before the DAG's can run correctly. The newest version of pip must also be upgraded before installation. </p>
+<p>The ETL pipelines process and load geometric shape data which relies on the geopandas (geopandas==0.9.0) package in python 3.6. This must be installed before the DAG's can run correctly. The newest version of pip must also be upgraded before installation. </p>
 
 ```
 pip install --upgrade pip
@@ -70,13 +87,15 @@ pip install geopandas
 
 2. Creates an S3 Staging Bucket
 
-<p>The next dependency is to create a local S3 bucket to hold lookup data before being loaded into Redshift. This will act as a staging area for shape files. Remember that the bucket name must be set in airflow UI before DAGS can be run.</p>
+<p>The next dependency is to create a local S3 bucket to hold lookup data before being loaded into Redshift. This will act as a staging area for shape files. Remember that the bucket name must be set in airflow UI before DAGS can be run. </p>
+
+<p>Either perform the above steps manually or just run the setup script.</p>
 
 <br>
 
 **Create the Redshift Cluster**
 
-<p>As described within the project scope, the design requires a ra3.xlplus RA3 node cluster. Use the "create_cluster.sh" script in project root to spin up the cluster before running the DAGs.</p>
+<p>As described within the project scope, the design requires a ra3.xlplus RA3 node cluster. Use the "create_cluster.sh" script in project root to spin up the cluster before running the DAGs. Either setup a cluster manually through the AWS console or run the create_cluster script.</p>
 
 ```
 # ./create_cluster.sh -h
@@ -88,23 +107,26 @@ creating cluster......
 
 <br>
 
-**Set Airflow Connection Parameters**
+**Set Airflow Connections**
 
 1. AWS User
 
-<p>You'll need to create an AWS user which has access to load data into Redshift from S3. These credentials must be be set in the airflow UI as "aws", which will be picked up by the dags during execution.</p>
+<p>You'll need to add your AWS user which has access to load data into Redshift from S3. These credentials must be be set in the airflow UI as "aws", which will be picked up by the dags during execution.</p>
+
 
 2. Redshift Hostname
 
 <p>The redshift Hostname will need to be added into the Airflow UI as "redshift", which will be picked up by the dags during execution. </p>
 
 
-3. S3 Local Bucket Name
+**Set Variables Parameters**
 
-<p>As mentioned above, set the bucket name as "local_bucket", which will be picked up by the dags during execution. </p>
+1. S3 Local Bucket Name
+
+<p>As mentioned above, set the bucket name variable as "local_bucket"="your-bucket-name", which will be picked up by the dags during execution. </p>
 
 
-4. Add HOME_ variable to indicate DAG home directory
+2. Add HOME_ variable to indicate DAG home directory
 
 <p>Location of the Home directory where dags are located. (Default: /home/workspace/airflow/dags)</p>
 
