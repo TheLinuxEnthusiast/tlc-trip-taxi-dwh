@@ -49,7 +49,7 @@ Python 3.6.3
 
 **Prerequisites**
 
-<p>There are a number of prerequisites that are required before the Airflow pipelines can be run.</p>
+<p>There are a number of prerequisites required before the Airflow pipelines can be run.</p>
 
 1. Create an AWS User
 

@@ -145,7 +145,7 @@ Payment Type:(Same as above)
 
 <br>
 
-#### Lookup files - taxi_zone_lookup.csv & taxi_zone.shp
+#### Lookup file 1 - taxi_zone_lookup.csv & taxi_zone.shp
 
 | Field Name              | Field Description                                          | Data Type  |
 |:-----------------------:|:----------------------------------------------------------:|:----------:|
@@ -156,6 +156,17 @@ Payment Type:(Same as above)
 | Shape Length            | Length of shape polgon object                              | float      |
 | Shape Area              | Area of shape polygon object                               | float      |
 | Geometry                | polygon data type, represents the taxi zone as a polygon   | polygon    |
+
+<br>
+
+#### Lookup File 2 - taxi_base_lookup.csv
+
+| Field Name                  | Field Description                                               | Data Type  |
+|:---------------------------:|:---------------------------------------------------------------:|:----------:|
+| High Volume License Number  | Licence number for transport provider that are high frequency   | string     |
+| License Number              | Alternative Licence number                                      | string     |
+| Base Name                   | Base of operations where the transport provider deploys from    | string     |
+| App Company Affiliation     | App name associated with tranport provider                      | string     |
 
 <br>
 
