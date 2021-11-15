@@ -166,7 +166,7 @@ Payment Type:(Same as above)
 | High Volume License Number  | Licence number for transport provider regarded as high freq     | string     |
 | License Number              | Alternative Licence number                                      | string     |
 | Base Name                   | Base of operations where the transport provider deploys from    | string     |
-| App Company Affiliation     | App name associated with tranport provider                      | string     |
+| App Company Affiliation     | App name associated with transport provider                     | string     |
 
 <br>
 
