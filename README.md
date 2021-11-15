@@ -79,7 +79,7 @@ pip install geopandas
 <p>As described within the project scope, the design requires a ra3.xlplus RA3 node cluster. Use the "create_cluster.sh" script in project root to spin up the cluster before running the DAGs.</p>
 
 ```
-# ./create_cluster -h
+# ./create_cluster.sh -h
 ./create_cluster.sh [-h|help] [-T|testing] [-P|production] [-d|delete] <cluster-identifier>
 
 # ./create_cluster.sh -P

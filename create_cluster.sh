@@ -32,6 +32,9 @@ do
 	d)
 		CLUSTER_NAME="${OPTARG}"
 	;;
+    h)
+        usage
+    ;;
 	*)
 		usage
 	;;
@@ -45,7 +48,8 @@ shift $((OPTIND-1))
 
 create_cluster(){
 	
-	if [ "${ISTEST}" = "0" ];then
+	if [ "${ISTEST}" = "0" ];
+    then
 
 		aws redshift create-cluster \
 			--cluster-identifier ${DEFAULT_NAME} \
@@ -84,7 +88,8 @@ delete_cluster(){
 
 main(){
 
-	if [ ! -z "${CLUSTER_NAME}" ]; then
+	if [ ! -z "${CLUSTER_NAME}" ]; 
+    then
 		echo "deleting cluster....."
 		delete_cluster
 		exit 0	
