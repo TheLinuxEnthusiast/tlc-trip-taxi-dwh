@@ -49,7 +49,7 @@ td1.month
     
 **Output**
     
-![Average cost, distance and duration](images/query1.PNG)
+![Average cost, distance and duration](../images/query1.PNG)
 
 
 <br>
