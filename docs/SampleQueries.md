@@ -21,10 +21,36 @@
 ### Sample Queries to Validate Star Schema Design
 
 
-1. Average Journey distance, duration and fair by taxi base type
+1. Average Journey distance, duration and fair by taxi base type for March 2020
 
 ```
+    
+SELECT
+  AVG(tf.trip_distance) as avg_trip_distance_miles,
+  AVG(tf.trip_duration) as avg_trip_duration_min,
+  AVG(tf.total_amount) as avg_total_amount_dollars,
+  tbd.taxi_base_description,
+  td1.month
+FROM public.trip_fact tf
+JOIN public.taxi_base_dim tbd
+ON tf.taxi_base_key_id = tbd.taxi_base_key_id
+JOIN public.time_dim td1
+ON td1.event_datetime = tf.pickup_datetime
+JOIN public.time_dim td2
+ON td2.event_datetime = tf.dropoff_datetime
+WHERE td1.month = 3
+AND td2.month = 3
+GROUP BY 
+tbd.taxi_base_description,
+td1.month
+;
+    
 ```
+    
+**Output**
+    
+![Average cost, distance and duration](images/query1.PNG)
+
 
 <br>
 
