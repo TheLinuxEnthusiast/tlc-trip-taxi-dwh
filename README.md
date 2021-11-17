@@ -296,6 +296,6 @@ creating cluster......
 
 <p>Once all of the above has been created, you can run the dags from the airflow UI. In production, the dags will run on a monthly schedule, however by default they are set to run for March 2020 only. This is just for testing purposes to prove that the pipelines are working. So you will need to trigger manually from the UI to test. </p>
 
-<p>Switch on all DAGs as shown below and run either yellow, green, fhv or fhv_hv pipelines which are the primary dags. Taxi zone and base are triggered by the other DAG's. Note that due to the size of the fhv_hv source file (tens of millions of rows) it can take up to +3 hours to load the data for this one. Yellow, green or fhv all should process a much faster. </p>
+<p>Switch on all DAGs as shown below and run either yellow, green, fhv or fhv_hv pipelines which are the primary dags. Taxi zone and base are triggered by the other DAG's. Note that due to the size of the fhv_hv source file (tens of millions of rows) it can take up to +3 hours to load the data for this one. Yellow, green or fhv all should process much faster. </p>
 
 ![Airflow UI](images/airflow_ui.PNG)
