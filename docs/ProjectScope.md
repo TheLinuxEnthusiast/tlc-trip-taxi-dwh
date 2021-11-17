@@ -14,6 +14,8 @@
 
 5. [ETL Design](ETLDesign.md) 
 
+6. [Sample Queries](SampleQueries.md)
+
 <br>
 
 ### 1.0 Introduction

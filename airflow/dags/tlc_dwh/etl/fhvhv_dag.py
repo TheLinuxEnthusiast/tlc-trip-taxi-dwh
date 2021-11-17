@@ -38,9 +38,10 @@ default_args = {
 with DAG(
     "tlc_fhvhv_taxi_data_etl",
     default_args=default_args,
-    start_date=default_args['start_date'],
+    #start_date=default_args['start_date'],
     #schedule_interval="@monthly",
     schedule_interval=None,
+    catchup=False
 ) as dag:
     
     start_operator = DummyOperator(
@@ -135,7 +136,7 @@ with DAG(
     
     prod_data_quality_check = ProdDataQualityCheck(
         task_id="prod_data_quality_check",
-        
+        source="fhvhv"
     )
     
     end_operator = DummyOperator(

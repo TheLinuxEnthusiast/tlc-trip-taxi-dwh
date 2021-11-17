@@ -19,17 +19,25 @@ class ProdDataQualityCheck(BaseOperator):
         "trip_type": 3
     }
     
+    taxi_base_ref = {
+        "yellow": "Yellow",
+        "green": "Green",
+        "fhv": "FHV",
+        "fhvhv": "FHV_HV"
+    }
     
     @apply_defaults
     def __init__(self,
                  redshift_conn_id="",
                  aws_credentials_id="",
+                 source="",
                  *args,
                  **kwargs):
         
         super(ProdDataQualityCheck, self).__init__(*args, **kwargs)
         self.aws_credentials_id = aws_credentials_id
         self.redshift_conn_id=redshift_conn_id
+        self.source = source
         
         
     def execute(self, context):
@@ -68,9 +76,20 @@ class ProdDataQualityCheck(BaseOperator):
 
     
         # Check if rows were inserted into fact
-        # Check fact insert date TODO
-        
-
-        # Run a sample query and check results were as expected
+        try:
+            sql_formatted = ProdDataQualitySQL.check_fact_count.format(f"{ProdDataQualityCheck.taxi_base_ref[self.source]}")
+            cursor.execute(sql_formatted)
+            result = cursor.fetchall()
+            self.log.info(f"{result}")
+            
+            if result[0][0] > 0:
+                pass
+            else:
+                raise(f"Issue with number of rows in trip fact for source {self.source}")
+            
+            
+        except Exception as e:
+            print(e)
+            raise("Issues checking row count")
     
         

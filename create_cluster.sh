@@ -12,6 +12,7 @@ DEFAULT_USER="awsuser"
 DEFAULT_PW="KalmPanik91!"
 DEFAULT_NODE_SIZE="dc2.large"
 DEFAULT_PROFILE="admin"
+PROD_NODE_SIZE="ra3.xlplus"
 
 ISTEST=
 
@@ -64,12 +65,10 @@ create_cluster(){
                         --cluster-identifier tlc-production-dwh \
                         --master-username ${DEFAULT_USER} \
                         --master-user-password ${DEFAULT_PW} \
-                        --node-type 3 \
+                        --node-type ${PROD_NODE_SIZE} \
                         --cluster-type multi-node \
                         --publicly-accessible \
-                        --availability-zone ${DEFAULT_REGION} \
-                        --cluster-security-groups ${DEFAULT_SG} \
-                        --profile ${DEFAULT_PROFILE}	
+                        --profile ${DEFAULT_PROFILE}
 
 	fi
 

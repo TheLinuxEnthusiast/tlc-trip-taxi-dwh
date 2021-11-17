@@ -5,8 +5,6 @@
 
 **Creation Date: 2021-10-21**
 
-**Last Modified Data: 2021-11-13**
-
 -------------------------------------------------------
 
 ### Documentation
@@ -21,13 +19,162 @@
 
 5. [ETL Design](docs/ETLDesign.md) 
 
+6. [Sample Queries](docs/SampleQueries.md)
 
 <br>
 
 ### Project Index
 
-![Project Index](images/project_index.png)
+```
+airflow
+├── dags
+│   ├── aws.cfg
+│   ├── aws-master.cfg
+│   ├── __init__.py
+│   ├── __pycache__
+│   │   ├── extract_and_enrich_from_s3.cpython-36.pyc
+│   │   └── extract_and_unzip_from_s3.cpython-36.pyc
+│   ├── tlc_dwh
+│   │   ├── common
+│   │   │   └── __pycache__
+│   │   │       └── taxi_zone_lookup_dag.cpython-36.pyc
+│   │   ├── etl
+│   │   │   ├── fhv_dag.py
+│   │   │   ├── fhvhv_dag.py
+│   │   │   ├── green_dag.py
+│   │   │   ├── __init__.py
+│   │   │   ├── __pycache__
+│   │   │   │   ├── fhv_dag.cpython-36.pyc
+│   │   │   │   ├── fhvhv_dag.cpython-36.pyc
+│   │   │   │   ├── green_dag.cpython-36.pyc
+│   │   │   │   ├── hvfhv_dag.cpython-36.pyc
+│   │   │   │   ├── taxi_base_lookup_dag.cpython-36.pyc
+│   │   │   │   ├── taxi_zone_lookup_dag.cpython-36.pyc
+│   │   │   │   └── yellow_dag.cpython-36.pyc
+│   │   │   ├── taxi_base_lookup_dag.py
+│   │   │   ├── taxi_zone_lookup_dag.py
+│   │   │   └── yellow_dag.py
+│   │   └── __init__.py
+│   └── tmp
+│       ├── modified
+│       │   ├── taxi_zones_adj.cpg
+│       │   ├── taxi_zones_adj.dbf
+│       │   ├── taxi_zones_adj.prj
+│       │   ├── taxi_zones_adj.shp
+│       │   └── taxi_zones_adj.shx
+│       ├── taxi_zones.dbf
+│       ├── taxi_zones.prj
+│       ├── taxi_zones.sbn
+│       ├── taxi_zones.sbx
+│       ├── taxi_zones.shp
+│       ├── taxi_zones.shp.xml
+│       └── taxi_zones.shx
+├── datasets
+│   └── taxi_base_lookup.csv
+├── pip_dependencies.sh
+├── plugins
+│   ├── helpers
+│   │   ├── __init__.py
+│   │   ├── __pycache__
+│   │   │   ├── __init__.cpython-36.pyc
+│   │   │   ├── sql_data_quality.cpython-36.pyc
+│   │   │   ├── sql_dimension_tables.cpython-36.pyc
+│   │   │   ├── sql_fact_tables.cpython-36.pyc
+│   │   │   ├── sql_functions.cpython-36.pyc
+│   │   │   ├── sql_insert_queries.cpython-36.pyc
+│   │   │   ├── sql_prod_data_quality.cpython-36.pyc
+│   │   │   ├── sql_staging_data_quality.cpython-36.pyc
+│   │   │   ├── sql_staging_tables.cpython-36.pyc
+│   │   │   ├── sql_stored_procedures.cpython-36.pyc
+│   │   │   └── sql_truncate_staging.cpython-36.pyc
+│   │   ├── sql_data_quality.py
+│   │   ├── sql_dimension_tables.py
+│   │   ├── sql_fact_tables.py
+│   │   ├── sql_functions.py
+│   │   ├── sql_insert_queries.py
+│   │   ├── sql_prod_data_quality.py
+│   │   ├── sql_staging_data_quality.py
+│   │   ├── sql_staging_tables.py
+│   │   ├── sql_stored_procedures.py
+│   │   └── sql_truncate_staging.py
+│   ├── __init__.py
+│   ├── operators
+│   │   ├── clean_staging_data.py
+│   │   ├── extract_and_unzip_from_s3.py
+│   │   ├── facts_calculator.py
+│   │   ├── fhv_enrichment.py
+│   │   ├── has_rows.py
+│   │   ├── __init__.py
+│   │   ├── load_dependencies.py
+│   │   ├── load_dimension.py
+│   │   ├── load_fact.py
+│   │   ├── prod_data_quality_check.py
+│   │   ├── __pycache__
+│   │   │   ├── clean_staging_data.cpython-36.pyc
+│   │   │   ├── extract_and_unzip_from_s3.cpython-36.pyc
+│   │   │   ├── facts_calculator.cpython-36.pyc
+│   │   │   ├── fhv_enrichment.cpython-36.pyc
+│   │   │   ├── has_rows.cpython-36.pyc
+│   │   │   ├── __init__.cpython-36.pyc
+│   │   │   ├── load_dependencies.cpython-36.pyc
+│   │   │   ├── load_dimension.cpython-36.pyc
+│   │   │   ├── load_fact.cpython-36.pyc
+│   │   │   ├── prod_data_quality_check.cpython-36.pyc
+│   │   │   ├── s3_copy_object_operator.cpython-36.pyc
+│   │   │   ├── s3_extract_zip_files.cpython-36.pyc
+│   │   │   ├── s3_to_local.cpython-36.pyc
+│   │   │   ├── s3_to_redshift.cpython-36.pyc
+│   │   │   ├── s3_to_staging.cpython-36.pyc
+│   │   │   ├── s3_to_staging_with_enrichment.cpython-36.pyc
+│   │   │   └── staging_data_quality_check.cpython-36.pyc
+│   │   ├── s3_copy_object_operator.py
+│   │   ├── s3_extract_zip_files.py
+│   │   ├── s3_to_local.py
+│   │   ├── s3_to_redshift.py
+│   │   ├── s3_to_staging.py
+│   │   ├── s3_to_staging_with_enrichment.py
+│   │   └── staging_data_quality_check.py
+│   ├── __pycache__
+│   │   └── __init__.cpython-36.pyc
+│   └── scripts
+│       ├── extract_and_unzip_from_s3.py
+│       └── __pycache__
+│           └── extract_and_unzip_from_s3.cpython-36.pyc
+├── requirements.txt
+└── setup.py
+```
 
+```
+docs/
+├── DataDictionary.md
+├── DataModel.md
+├── ETLDesign.md
+├── ProjectScope.md
+└── SampleQueries.md
+```
+
+```
+images/
+├── airflow_ui.PNG
+├── aws_access.PNG
+├── conceptual_model.png
+├── fhv_dag.PNG
+├── fhvhv_dag.PNG
+├── green_dag.PNG
+├── logical_model.png
+├── NYC_Zones.jpg
+├── NYC_Zones.png
+├── project_index.png
+├── taxi_base_dag.PNG
+├── taxi_zone_dag.PNG
+└── yellow_dag.PNG
+```
+
+```
+misc
+├── conceptual_model.drawio
+└── logical_diagram.drawio
+```
 
 <br>
 

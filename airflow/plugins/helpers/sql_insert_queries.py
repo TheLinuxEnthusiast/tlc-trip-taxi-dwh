@@ -529,8 +529,8 @@ class InsertQueriesSQL:
       vd.vendor_key_id,
       CAST(ys.pickup_datetime as datetime) as pickup_datetime,
       CAST(ys.dropoff_datetime as datetime) as dropoff_datetime,
-      ld_pu.location_key_id,
-      ld_do.location_key_id,
+      ld_pu.location_key_id as pu_location_key_id,
+      ld_do.location_key_id as do_location_key_id,
       CAST(passenger_count as int4) as passenger_count,
       rcd.ratecode_key_id,
       calculate_duration(pickup_datetime, dropoff_datetime) as duration,
@@ -596,8 +596,8 @@ class InsertQueriesSQL:
       vd.vendor_key_id,
       CAST(gs.pickup_datetime as datetime) as pickup_datetime,
       CAST(gs.dropoff_datetime as datetime) as dropoff_datetime,
-      ld_pu.location_key_id,
-      ld_do.location_key_id,
+      ld_pu.location_key_id as pu_location_key_id,
+      ld_do.location_key_id as do_location_key_id,
       CAST(passenger_count as int4) as passenger_count,
       rcd.ratecode_key_id,
       calculate_duration(pickup_datetime, dropoff_datetime) as duration,
@@ -665,15 +665,15 @@ class InsertQueriesSQL:
       CAST('0' as int4) as vendor_key_id,
       CAST(fs.pickup_datetime as datetime) as pickup_datetime,
       CAST(fs.dropoff_datetime as datetime) as dropoff_datetime,
-      ld_pu.location_key_id,
-      ld_do.location_key_id,
+      ld_pu.location_key_id as pu_location_key_id,
+      ld_do.location_key_id as do_location_key_id,
       CASE
             WHEN sr_flag = '1' THEN CAST('2' as int4) 
             WHEN sr_flag = '0' THEN CAST('1' as int4)
             END as passenger_count,
       CAST('1' as int4) as ratecode_key_id,
       calculate_duration(pickup_datetime, dropoff_datetime) as duration,
-      CAST(haversine(tzls_pu.centroid_y, 
+      CAST(haversine(tzls_pu.centroid_y,
                      tzls_pu.centroid_x, 
                      tzls_do.centroid_y, 
                      tzls_do.centroid_x) as decimal(19,11)) as trip_distance,
@@ -736,8 +736,8 @@ class InsertQueriesSQL:
       CAST('0' as int4) as vendor_key_id,
       CAST(fs.pickup_datetime as datetime) as pickup_datetime,
       CAST(fs.dropoff_datetime as datetime) as dropoff_datetime,
-      ld_pu.location_key_id,
-      ld_do.location_key_id,
+      ld_pu.location_key_id as pu_location_key_id,
+      ld_do.location_key_id as do_location_key_id,
       CASE
             WHEN sr_flag = '1' THEN CAST('2' as int4) 
             WHEN sr_flag = '0' THEN CAST('1' as int4)

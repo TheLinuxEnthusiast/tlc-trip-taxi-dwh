@@ -14,6 +14,8 @@
 
 5. ETL Design
 
+6. [Sample Queries](SampleQueries.md)
+
 <br>
 
 ### 6.0 ETL Design
