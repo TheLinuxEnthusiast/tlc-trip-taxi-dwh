@@ -294,8 +294,24 @@ creating cluster......
 
 ### Running Airflow Pipelines
 
-<p>Once all of the above has been created, you can run the dags from the airflow UI. In production, the dags will run on a monthly schedule, however by default they are set to run for March 2020 only. You can run each dag manually from the UI or you can run the dags between an interval date range to test the ability to load files historically. </p>
+<p>Once all of the above has been created, you can run the dags from the airflow UI. In production, the dags will run on a monthly schedule, however by default they are set to run for March 2020 - June 2020 only. You can run each dag manually from the UI or you can run the dags between an interval date range to test the ability to load files historically. </p>
 
 <p>Switch on all DAGs as shown below and run either yellow, green, fhv or fhv_hv pipelines which are the primary dags. Taxi zone and base are triggered by the other DAG's. Note that due to the size of the fhv_hv source file (tens of millions of rows) it can take up to +3 hours to load the data for this one. Yellow, green or fhv all should process much faster. </p>
 
 ![Airflow UI](images/airflow_ui.PNG)
+
+<br>
+
+**Running for a single month**
+
+<p>If you need to run for a single month historically in the past, modify the start_date in the default args config as shown below. Since its a single run, the schedule interval can be set to None. </p>
+
+![Single Month Run](images/single_month_run.PNG)
+
+<br>
+
+**Running for a time range**
+
+<p>If you want to load multiple files at the same time set the default args to the following. Make sure the schedule interval is set to @monthly. </p>
+
+![Ranged Run](images/range_run.PNG)
