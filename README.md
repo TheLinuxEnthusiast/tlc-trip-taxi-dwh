@@ -213,7 +213,7 @@ Python 3.6.3
 
 1. Create an AWS User
 
-<p>Create an AWS user that has permission to copy data from S3 into redshift. The user should also have permissions to connect and query redshift. For simplicity you can add the below policies. </p>
+<p>Create an AWS user that has permission to copy data from S3 into redshift. The user should also have permissions to connect and query redshift. For testing purposes or for simplicity you can add the below policies. </p>
 
 ![AWS Access](images/aws_access.PNG)
 
