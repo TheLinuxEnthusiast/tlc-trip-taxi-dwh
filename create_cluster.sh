@@ -21,11 +21,11 @@ PROD_TYPE="multi-node"
 ISTEST=
 
 usage(){
-	echo "$0 [-T|testing] [-P|production] [-d|delete] <cluster-identifier>"
+	echo "$0 [-T|testing] [-P|production] [-d|delete] [-h|help] <cluster-identifier>"
 	exit 1
 }
 
-while getopts "TPd:" opt
+while getopts "TPd:h" opt
 do
 	case "$opt" in
 	T)
@@ -61,21 +61,19 @@ create_cluster(){
 			--master-username ${DEFAULT_USER} \
 			--master-user-password ${DEFAULT_PW} \
 			--node-type ${DEFAULT_NODE_SIZE} \
-            --number-of-nodes ${DEFAULT_NUMBER_OF_NODES} \
 			--cluster-type ${DEFAULT_TYPE} \
 			--publicly-accessible \
 			--profile ${DEFAULT_PROFILE}
 	else
 		aws redshift create-cluster \
-                        --cluster-identifier ${PROD_NAME} \
-                        --master-username ${DEFAULT_USER} \
-                        --master-user-password ${DEFAULT_PW} \
-                        --node-type ${PROD_NODE_SIZE} \
-                        --number-of-nodes ${PROD_NUMBER_OF_NODES} \
-                        --cluster-type ${PROD_TYPE} \
-                        --publicly-accessible \
-                        --profile ${DEFAULT_PROFILE}
-
+            --cluster-identifier ${PROD_NAME} \
+            --master-username ${DEFAULT_USER} \
+            --master-user-password ${DEFAULT_PW} \
+            --node-type ${PROD_NODE_SIZE} \
+            --number-of-nodes ${PROD_NUMBER_OF_NODES} \
+            --cluster-type ${PROD_TYPE} \
+            --publicly-accessible \
+            --profile ${DEFAULT_PROFILE}
 	fi
 
 
