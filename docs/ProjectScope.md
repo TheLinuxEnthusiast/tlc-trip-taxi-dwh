@@ -73,6 +73,16 @@
 | fhv_tripdata_YYYY-MM.csv     | CSV      | +1 million     | 7              | 100-300MB  | Monthly    | s3://nyc-tlc/trip data/ |
 | fhvhv_tripdata_YYYY-MM.csv   | CSV      | +10 million    | 7              | +1GB       | Monthly    | s3://nyc-tlc/trip data/ |
 
+
+<p>To list the files available in the source S3 bucket run the following command using the aws cli:</p>
+
+```
+aws s3 ls "s3://nyc-tlc/trip data/" --no-sign-request
+```
+
+![Source Files in S3](../images/file_list.PNG)
+
+
 <br>
 
 #### 3.1.2 Additional datasets
