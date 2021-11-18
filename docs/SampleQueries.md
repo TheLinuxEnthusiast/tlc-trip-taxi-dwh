@@ -54,7 +54,7 @@ td1.month
 
 <br>
 
-2. Number of journeys per month by taxi base
+2. Number of journeys in 2020 per month for Yellow Taxis 
 
 
 ```

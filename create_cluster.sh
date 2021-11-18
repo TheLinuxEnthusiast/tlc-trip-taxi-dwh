@@ -12,7 +12,11 @@ DEFAULT_USER="awsuser"
 DEFAULT_PW="KalmPanik91!"
 DEFAULT_NODE_SIZE="dc2.large"
 DEFAULT_PROFILE="admin"
+DEFAULT_NUMBER_OF_NODES=1
+PROD_NAME="tlc-production-dwh"
 PROD_NODE_SIZE="ra3.xlplus"
+PROD_NUMBER_OF_NODES=3
+PROD_TYPE="multi-node"
 
 ISTEST=
 
@@ -57,16 +61,18 @@ create_cluster(){
 			--master-username ${DEFAULT_USER} \
 			--master-user-password ${DEFAULT_PW} \
 			--node-type ${DEFAULT_NODE_SIZE} \
+            --number-of-nodes ${DEFAULT_NUMBER_OF_NODES} \
 			--cluster-type ${DEFAULT_TYPE} \
 			--publicly-accessible \
 			--profile ${DEFAULT_PROFILE}
 	else
 		aws redshift create-cluster \
-                        --cluster-identifier tlc-production-dwh \
+                        --cluster-identifier ${PROD_NAME} \
                         --master-username ${DEFAULT_USER} \
                         --master-user-password ${DEFAULT_PW} \
                         --node-type ${PROD_NODE_SIZE} \
-                        --cluster-type multi-node \
+                        --number-of-nodes ${PROD_NUMBER_OF_NODES} \
+                        --cluster-type ${PROD_TYPE} \
                         --publicly-accessible \
                         --profile ${DEFAULT_PROFILE}
 
@@ -91,7 +97,7 @@ main(){
     then
 		echo "deleting cluster....."
 		delete_cluster
-		exit 0	
+		exit 0
 	else
 		echo "creating cluster......"
 		create_cluster
