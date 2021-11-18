@@ -31,6 +31,9 @@ class S3ToStaging(BaseOperator):
         self.is_shape=is_shape
 
     def execute(self, context):
+        execution_date = context.get("execution_date")
+        print(type(execution_date))
+        print(execution_date)
         aws_hook = AwsHook(self.aws_credentials_id)
         credentials = aws_hook.get_credentials()
         redshift = PostgresHook(postgres_conn_id=self.redshift_conn_id)
@@ -53,7 +56,7 @@ class S3ToStaging(BaseOperator):
         
         # Load data from S3 into staging
         self.log.info("Copying data from S3 to Redshift")
-        rendered_key = self.s3_key.format(**context)
+        rendered_key = self.s3_key.format(execution_date.year, str(execution_date.month).zfill(2))
         s3_path = "s3://{}/{}".format(self.s3_bucket, rendered_key)
         
         

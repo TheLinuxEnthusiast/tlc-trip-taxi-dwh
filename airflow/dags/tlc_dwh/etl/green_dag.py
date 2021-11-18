@@ -28,21 +28,15 @@ default_args = {
     'aws_credentials_id': 'aws',
     's3_bucket': 'nyc-tlc',
     'start_date': datetime(2020, 3, 1, 0, 0, 0),
-    'year': datetime(2020, 3, 1, 0, 0, 0).year,
-    'month': datetime(2020, 3, 1, 0, 0, 0).month
 }
-#'start_date': datetime.utcnow(),
-#'year': datetime.utcnow().year,
-#'month': datetime.utcnow().month
 
 
 with DAG(
     "tlc_green_taxi_data_etl",
     default_args=default_args,
-    #start_date=default_args['start_date'],
     #schedule_interval="@monthly",
     schedule_interval=None,
-    catchup=False
+    max_active_runs=1,
 ) as dag:
     
     start_operator = DummyOperator(
@@ -66,7 +60,7 @@ with DAG(
     load_green_staging_table = S3ToStaging(
         task_id="Load_green_taxi_data_into_staging",
         table="green_staging",
-        s3_key="trip data/green_tripdata_{}-{}.csv".format(default_args["year"], str(default_args["month"]).zfill(2)),
+        s3_key="trip data/green_tripdata_{}-{}.csv",
         is_shape=False
     )
     

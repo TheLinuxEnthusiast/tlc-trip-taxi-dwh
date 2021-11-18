@@ -22,9 +22,7 @@ default_args = {
     'redshift_conn_id': 'redshift',
     'aws_credentials_id': 'aws',
     's3_bucket': 'nyc-tlc',
-    'start_date': datetime(2020, 3, 1, 0, 0, 0),
-    'year': datetime(2020, 3, 1, 0, 0, 0).year,
-    'month': datetime(2020, 3, 1, 0, 0, 0).month
+    'start_date': datetime(2020, 1, 1, 0, 0, 0),
 }
 
 #HOME_ = "/home/workspace/airflow/dags"
@@ -34,9 +32,9 @@ local_bucket = Variable.get("local_bucket")
 with DAG(
     "tlc_taxi_zone_lookup_etl",
     default_args=default_args,
-    start_date=default_args['start_date'],
     #schedule_interval="@monthly",
     schedule_interval=None,
+    max_active_runs=1,
 ) as dag:
     
     start_operator = DummyOperator(

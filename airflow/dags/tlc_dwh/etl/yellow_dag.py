@@ -6,8 +6,6 @@ from airflow.operators.python_operator import PythonOperator
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.dagrun_operator import TriggerDagRunOperator
 
-#from airflow.sensors.external_task_sensor import ExternalTaskSensor
-
 from operators.s3_to_staging import S3ToStaging
 from operators.staging_data_quality_check import StagingDataQuality
 from operators.load_dependencies import LoadDependencies
@@ -27,21 +25,16 @@ default_args = {
     'redshift_conn_id': 'redshift',
     'aws_credentials_id': 'aws',
     's3_bucket': 'nyc-tlc',
-    'start_date': datetime(2020, 3, 1, 0, 0, 0),
-    'year': datetime(2020, 3, 1, 0, 0, 0).year,
-    'month': datetime(2020, 3, 1, 0, 0, 0).month
+    'start_date': datetime(2020, 6, 1, 0, 0, 0),
+    'end_date': datetime(2020, 12, 1, 0, 0, 0),
 }
-#'start_date': datetime.utcnow(),
-#'year': datetime.utcnow().year,
-#'month': datetime.utcnow().month
 
 with DAG(
     "tlc_yellow_taxi_data_etl",
     default_args=default_args,
-    #start_date=default_args['start_date'],
-    #schedule_interval="@monthly",
-    schedule_interval=None,
-    catchup=False
+    schedule_interval="@monthly",
+    max_active_runs=1,
+    #catchup=True
 ) as dag:
     
     start_operator = DummyOperator(
@@ -65,7 +58,7 @@ with DAG(
     load_yellow_staging_table = S3ToStaging(
         task_id="load_yellow_taxi_data_into_staging",
         table="yellow_staging",
-        s3_key="trip data/yellow_tripdata_{}-{}.csv".format(default_args["year"], str(default_args["month"]).zfill(2)),
+        s3_key="trip data/yellow_tripdata_{}-{}.csv",
         is_shape=False
     )
     
