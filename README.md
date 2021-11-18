@@ -279,7 +279,7 @@ creating cluster......
 <p>The redshift Hostname will need to be added into the Airflow UI as "redshift", which will be picked up by the dags during execution. </p>
 
 
-**Set Variables Parameters**
+**Set Airflow Variables**
 
 1. S3 Local Bucket Name
 
