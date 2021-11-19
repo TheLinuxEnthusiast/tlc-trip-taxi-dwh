@@ -1,6 +1,9 @@
 
 class StoredProceduresSQL:
-    
+    """
+    Description: Stored procedures used for addressing some of the data quality issues before loading into the warehouse.
+    """
+
     replace_nulls = ("""
     CREATE OR REPLACE PROCEDURE replace_nulls(
     tableName text,

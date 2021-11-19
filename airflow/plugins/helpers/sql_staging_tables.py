@@ -1,5 +1,8 @@
 
 class CreateStagingTablesSQL:
+    """
+    Description: DDL SQL for staging tables. COPY statements for loading staging have also been included here. 
+    """
     
     create_yellow_staging = ("""
     CREATE TABLE IF NOT EXISTS public.yellow_staging (

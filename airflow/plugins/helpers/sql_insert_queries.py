@@ -1,5 +1,8 @@
 
 class InsertQueriesSQL:
+    """
+    Desscription: SQL Queries for inserting data into destination tables.
+    """
     
     time_dim_insert = ("""
         CREATE TEMP TABLE IF NOT EXISTS time_temp (LIKE public.time_dim);

@@ -1,5 +1,9 @@
 
 class ProdDataQualitySQL:
+    """
+    Description: Queries used for performing Data Quality checks on production tables.
+    """
+    
     
     check_dim_count = ("""
     SELECT COUNT(*) FROM {}

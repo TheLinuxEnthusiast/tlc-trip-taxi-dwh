@@ -9,7 +9,21 @@ import configparser
 import geopandas as gpd
 
 def extract_and_unzip_from_s3(*args, **kwargs):
+    """
+    Description: 
+        Custom function that extracts Shape files to a local S3 bucket, Converts shape data to Latitude, Longitude and Calculates Centroid of Geometry Object.
+        Requires aws-master.cfg to be set before running.
     
+    Arguments:
+        Kwargs: Home directory
+                source_bucket_name
+                source_key
+                dest_bucket_name
+                dest_key
+    
+    Returns:
+        None
+    """
     
     source_bucket_name = kwargs['source_bucket_name']
     source_key = kwargs['source_key']

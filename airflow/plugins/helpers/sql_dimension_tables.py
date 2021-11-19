@@ -1,6 +1,8 @@
 
 class CreateDimensionTablesSQL:
-    
+    """
+    Description: DDL SQL statements for Dimension tables.
+    """
     create_time_dim = ("""
         CREATE TABLE IF NOT EXISTS public.time_dim (
         event_datetime datetime NOT NULL,

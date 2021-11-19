@@ -1,5 +1,9 @@
 
 class FunctionsSQL:
+    """
+    Description: Custom functions to calculate distance, duration and fair cost.
+    """
+    
     
     haversine_distance_function = ("""
     CREATE OR REPLACE FUNCTION haversine(x_pickup decimal(19,11),

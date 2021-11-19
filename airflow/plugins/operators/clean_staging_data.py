@@ -28,9 +28,16 @@ class CleanStagingData(BaseOperator):
         self.schema = schema
     
     
-    #def run_sql(redshift_conn, )
-    
     def execute(self, context): 
+        """
+        Description: Executes stored procedures that clean the staging tables before being loaded into Destination Star Schema.
+        
+        Arguments:
+            context: Metadata from DAG run.
+        
+        Returns:
+            None
+        """
         aws_hook = AwsHook(self.aws_credentials_id)
         credentials = aws_hook.get_credentials()
         redshift = PostgresHook(postgres_conn_id=self.redshift_conn_id)

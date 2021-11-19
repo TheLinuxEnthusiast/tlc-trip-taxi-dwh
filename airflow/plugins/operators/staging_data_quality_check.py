@@ -24,7 +24,15 @@ class StagingDataQuality(BaseOperator):
 
     
     def execute(self, context):
+        """
+        Description: This function performs basic data quality checks against the staging data.
         
+        Arguments:
+            context: Metadata from dag execution
+            
+        Returns:
+            None
+        """
         aws_hook = AwsHook(self.aws_credentials_id)
         credentials = aws_hook.get_credentials()
         redshift = PostgresHook(postgres_conn_id=self.redshift_conn_id)

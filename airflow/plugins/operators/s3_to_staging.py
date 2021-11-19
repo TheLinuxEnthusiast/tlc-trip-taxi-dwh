@@ -31,6 +31,15 @@ class S3ToStaging(BaseOperator):
         self.is_shape=is_shape
 
     def execute(self, context):
+        """
+        Description: This function loads source csv data into staging tables in redshift.
+        
+        Arguments:
+            context: Metadata from dag run
+            
+        Returns:
+            None
+        """
         execution_date = context.get("execution_date")
         print(type(execution_date))
         print(execution_date)

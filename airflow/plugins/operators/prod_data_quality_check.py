@@ -41,6 +41,15 @@ class ProdDataQualityCheck(BaseOperator):
         
         
     def execute(self, context):
+        """
+        Description: This function performs basic data quality checks against the Star schema, validates expected number of rows in Dimensions and fact.
+        
+        Arguments:
+            context: Metadata from DAG run
+            
+        Returns:
+            None
+        """
         aws_hook = AwsHook(self.aws_credentials_id)
         credentials = aws_hook.get_credentials()
         redshift = PostgresHook(postgres_conn_id=self.redshift_conn_id)

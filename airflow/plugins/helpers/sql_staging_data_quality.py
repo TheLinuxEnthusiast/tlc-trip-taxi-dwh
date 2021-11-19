@@ -1,5 +1,8 @@
 
 class StagingDataQualitySQL:
+    """
+    Description: SQL for checking data quality in staging tables.
+    """
     
     expected_fields = {
         'yellow_staging': 18,

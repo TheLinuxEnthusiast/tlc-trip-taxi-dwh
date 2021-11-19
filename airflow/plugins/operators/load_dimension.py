@@ -30,6 +30,15 @@ class LoadDimension(BaseOperator):
         
         
     def execute(self, context):
+        """
+        Description: Loads dimension tables of star schema.
+        
+        Arguments:
+            context: Metadata from DAG run
+            
+        Returns:
+            None
+        """
         aws_hook = AwsHook(self.aws_credentials_id)
         credentials = aws_hook.get_credentials()
         redshift = PostgresHook(postgres_conn_id=self.redshift_conn_id)

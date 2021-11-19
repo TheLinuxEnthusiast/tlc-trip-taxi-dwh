@@ -23,7 +23,16 @@ class LoadDependencies(BaseOperator):
      
     
     def load_dependency(self, redshift_conn, sql_helper):
+        """
+        Description: Loops through dependant code for DAG run and runs it against the DB
         
+        Arguments:
+            redshift_conn: Redhsift Connection Object
+            sql_helper: Name of class with dependant code
+        
+        Returns:
+            None
+        """
         try:
             self.log.info(f"Loading Dependencies for {sql_helper}.....")
             lst = [i for i in dir(sql_helper) if not i.startswith('__')]
@@ -36,6 +45,15 @@ class LoadDependencies(BaseOperator):
         
     
     def execute(self, context):
+        """
+        Description: Executes "load_dependency" function
+        
+        Arguments:
+            context: Metadata from DAG run.
+            
+        Returns:
+            None
+        """
         aws_hook = AwsHook(self.aws_credentials_id)
         credentials = aws_hook.get_credentials()
         redshift = PostgresHook(postgres_conn_id=self.redshift_conn_id)

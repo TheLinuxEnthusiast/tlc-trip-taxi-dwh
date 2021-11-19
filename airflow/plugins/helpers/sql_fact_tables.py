@@ -1,5 +1,8 @@
 
 class CreateFactTableSQL:
+    """
+    Description: DDL SQL for Fact table
+    """
     
     create_trip_fact = ("""
      CREATE TABLE IF NOT EXISTS public.trip_fact (
