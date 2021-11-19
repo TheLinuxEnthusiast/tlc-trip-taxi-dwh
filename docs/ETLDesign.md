@@ -20,7 +20,7 @@
 
 ### 6.0 ETL Design
 
-<p>The legacy ETL codebase is custom written python code using pandas/numpy and SQL to tranform the data and write output to destination tables in Postgres. There are numerious difficulties maintaining the legacy codebase and it does not have any UI to help flag issues quickly. Apache Airflow will be implemented as the main orchestration tool to help improve code maintainability and provide a single consistent programming model in which to define the ETL pipelines. The Airflow cluster will be deployed and hosted in AWS. However, over time the DAGS will be migrated to "Amazon Managed Workflows for Apache Airflow" (MWAA) but this is out of scope for the inital phase of the project.</p>
+<p>The legacy ETL codebase is custom written python code using pandas/numpy and SQL to transform the data and write output to destination tables in Postgres. There are numerious difficulties maintaining the legacy codebase and it does not have any UI to help flag issues quickly. Apache Airflow will be implemented as the main orchestration tool to help improve code maintainability and provide a single consistent programming model in which to define the ETL pipelines. The Airflow cluster will be deployed and hosted in AWS. However, over time the DAGS will be migrated to "Amazon Managed Workflows for Apache Airflow" (MWAA) but this is out of scope for the inital phase of the project.</p>
 
 <p>As discussed in the project scope, the design must be able to handle three additional scenarios. One of which was: </p>
 
@@ -36,7 +36,7 @@ The pipelines would be run on a daily basis by 7 am every day. (e.g. Changed fro
 load_yellow_staging_table = S3ToStaging(
         task_id="load_yellow_taxi_data_into_staging",
         table="yellow_staging",
-        s3_key="trip data/yellow_tripdata_{}-{}.csv".format(default_args["year"], str(default_args["month"]).zfill(2)),
+        s3_key="trip data/yellow_tripdata_{}-{}.csv",
         is_shape=False
     )
 ```
